@@ -8,13 +8,25 @@ import { NavComponent } from './components/nav/nav.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HeaderModule } from './components/header/header.module';
-import { LayoutComponent } from './pages/layout/layout.component';
 import { LayoutModule } from './pages/layout/layout.module';
 import { NavModule } from './components/nav/nav.module';
+import { SectorsModule } from './pages/sectors/sectors.module';
+import { LotsComponent } from './pages/lots/lots.component';
+import { OpeExpensesComponent } from './pages/ope-expenses/ope-expenses.component';
+import { WorkersComponent } from './pages/workers/workers.component';
+import { PaymentsComponent } from './pages/payments/payments.component';
+import { CustomerComponent } from './pages/customer/customer.component';
+import { ChargesComponent } from './pages/charges/charges.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    LotsComponent,
+    OpeExpensesComponent,
+    WorkersComponent,
+    PaymentsComponent,
+    CustomerComponent,
+    ChargesComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,7 +34,8 @@ import { NavModule } from './components/nav/nav.module';
     BrowserAnimationsModule,
     HeaderModule,
     LayoutModule,
-    NavModule
+    NavModule,
+    SectorsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

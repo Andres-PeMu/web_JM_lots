@@ -1,8 +1,9 @@
-.nav-seccion-div  {
+.nav-seccion-div {
   display: flex;
   box-sizing: border-box;
   padding: 0 16px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 button {
