@@ -12,6 +12,7 @@ import { SalesComponent } from './sales.component';
   imports: [
     CommonModule,
     SalesRoutingModule
-  ]
+  ],
+  exports:[SalesComponent]
 })
 export class SalesModule { }

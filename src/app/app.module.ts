@@ -3,30 +3,23 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './components/header/header.component';
-import { NavComponent } from './components/nav/nav.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HeaderModule } from './components/header/header.module';
 import { LayoutModule } from './pages/layout/layout.module';
 import { NavModule } from './components/nav/nav.module';
 import { SectorsModule } from './pages/sectors/sectors.module';
-import { LotsComponent } from './pages/lots/lots.component';
-import { OpeExpensesComponent } from './pages/ope-expenses/ope-expenses.component';
-import { WorkersComponent } from './pages/workers/workers.component';
-import { PaymentsComponent } from './pages/payments/payments.component';
-import { CustomerComponent } from './pages/customer/customer.component';
-import { ChargesComponent } from './pages/charges/charges.component';
+import { ChargesModule } from './pages/charges/charges.module';
+import { CustomersModule } from './pages/customer/customers.module';
+import { LostModule } from './pages/lots/lost.module';
+import { OpeExpensesModule } from './pages/ope-expenses/ope-expenses.module';
+import { PaymentsModule } from './pages/payments/payments.module';
+import { SalesModule } from './pages/sales/sales.module';
+import { WorkersModule } from './pages/workers/workers.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LotsComponent,
-    OpeExpensesComponent,
-    WorkersComponent,
-    PaymentsComponent,
-    CustomerComponent,
-    ChargesComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,7 +28,14 @@ import { ChargesComponent } from './pages/charges/charges.component';
     HeaderModule,
     LayoutModule,
     NavModule,
-    SectorsModule
+    SectorsModule,
+    ChargesModule,
+    CustomersModule,
+    LostModule,
+    OpeExpensesModule,
+    PaymentsModule,
+    SalesModule,
+    WorkersModule
   ],
   providers: [],
   bootstrap: [AppComponent]

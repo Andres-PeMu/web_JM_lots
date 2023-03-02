@@ -11,27 +11,39 @@ const routes: Routes = [
     path: 'sectors',
     loadChildren: () => import('./pages/sectors/sectors.module').then(m => m.SectorsModule)
   },
-  // {
-  //   path: 'validarEmail',
-  //   loadChildren: () => import('./components/check-mail/check-mail.module').then(m => m.CheckMailModule)
-  // },
-  // {
-  //   path: 'recuperarContraseña',
-  //   loadChildren: () => import('./pages/recover-password/recover-password.module').then(m => m.RecoverPasswordComponentModule)
-  // },
-  // {
-  //   path: 'registrarUsuario',
-  //   loadChildren: () => import('./pages/registerUser/register-user.module').then(m => m.RegisterUserComponentModule)
-  // },
-  // {
-  //   path: 'tab0',
-  //   loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
-  // },
-  // {
-  //   path: '**',
-  //   redirectTo: 'login',
-  //   pathMatch: 'full'
-  // },
+  {
+    path: 'charges',
+    loadChildren: () => import('./pages/charges/charges.module').then(m => m.ChargesModule)
+  },
+  {
+    path: 'customer',
+    loadChildren: () => import('./pages/customer/customers.module').then(m => m.CustomersModule)
+  },
+  {
+    path: 'lots',
+    loadChildren: () => import('./pages/lots/lost.module').then(m => m.LostModule)
+  },
+  {
+    path: 'oe',
+    loadChildren: () => import('./pages/ope-expenses/ope-expenses.module').then(m => m.OpeExpensesModule)
+  },
+  {
+    path: 'payments',
+    loadChildren: () => import('./pages/payments/payments.module').then(m => m.PaymentsModule)
+  },
+  {
+    path: 'sales',
+    loadChildren: () => import('./pages/sales/sales.module').then(m => m.SalesModule)
+  },
+  {
+    path: 'workers',
+    loadChildren: () => import('./pages/workers/workers.module').then(m => m.WorkersModule)
+  },
+  {
+    path: '**',
+    redirectTo: 'sectors',
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({
