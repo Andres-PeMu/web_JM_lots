@@ -41,7 +41,7 @@ export class CardComponent {
       "id_customer": idCostumer
     };
     this._service.update(idChanges.toString(), data).subscribe( data => console.log(data));
-    this.loanPage()
+    window.location.reload();
   }
 
   handleCancel(){
@@ -55,9 +55,7 @@ export class CardComponent {
   }
 
   loanPage(){
-    this.load.emit(true);
     this.activateIdEdit = undefined;
-    this.load.emit(false);
   }
 
 }

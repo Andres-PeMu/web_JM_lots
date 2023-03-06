@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ChargesService, getChargues } from 'src/app/services/Http/charges.service';
 
 @Component({
@@ -36,15 +37,6 @@ export class ChargesComponent implements OnInit {
       return this.results;
     }
     return this.results = this.getCharges;
-  }
-
-  rechargeCharges() {
-    console.log('ya');
-    this._service.getAndCustomerAll().subscribe(res => {
-      this.getCharges = res;
-      this.results = res;
-      console.log(this.results);
-    });
   }
 
 }

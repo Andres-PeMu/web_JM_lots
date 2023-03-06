@@ -17,7 +17,9 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 
 @NgModule({
-  declarations: [CardComponent],
+  declarations: [
+    CardComponent,
+  ],
   imports: [
     CommonModule,
     CardRoutingModule,
@@ -30,7 +32,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
   ],
   exports: [CardComponent],
 })

@@ -18,6 +18,7 @@ export class ShellOverviewComponent {
 
   handleDelete(){
     this._service.delete(this._dataService.id).subscribe( data => console.log(data));
+    window.location.reload();
     this._bottomSheetRef.dismiss();
   }
 
