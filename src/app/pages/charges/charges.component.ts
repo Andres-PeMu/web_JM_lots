@@ -39,9 +39,11 @@ export class ChargesComponent implements OnInit {
   }
 
   rechargeCharges() {
+    console.log('ya');
     this._service.getAndCustomerAll().subscribe(res => {
       this.getCharges = res;
       this.results = res;
+      console.log(this.results);
     });
   }
 

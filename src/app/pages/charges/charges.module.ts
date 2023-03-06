@@ -9,12 +9,14 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadPageDirective } from 'src/app/directives/load-page.directive';
+import { ShellOverviewComponent } from './components/shell-overview/shell-overview.component';
 
 
 @NgModule({
     declarations: [
       ChargesComponent,
       LoadPageDirective,
+      ShellOverviewComponent,
     ],
     imports: [
         CommonModule,

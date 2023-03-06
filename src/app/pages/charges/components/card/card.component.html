@@ -24,7 +24,7 @@
       <button class="card_actions_button" color="accent" mat-raised-button mat-button
         (click)="handleSutmit(charge.ID_COBROS, charge.ID_CLIENTE)" *ngIf="activateIdEdit == charge.ID_COBROS">Enviar</button>
       <button class="card_actions_button" color="warn" mat-raised-button mat-button *ngIf="activateIdEdit == undefined"
-        (click)="handleDelete(charge.ID_COBROS)">Borrar</button>
+        (click)="handleDelete(charge.ID_COBROS)">Eliminar</button>
       <button class=" card_actions_button" color="warn" mat-raised-button mat-button
         *ngIf="activateIdEdit == charge.ID_COBROS" (click)="handleCancel()">Cancelar</button>
     </mat-card-actions>

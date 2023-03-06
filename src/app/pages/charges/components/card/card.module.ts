@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { MatFormFieldModule } from "@angular/material/form-field";
     MatAutocompleteModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    MatBottomSheetModule
   ],
   exports: [CardComponent],
 })

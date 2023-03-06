@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ChargesService, getChargues } from 'src/app/services/Http/charges.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { ShellOverviewComponent } from '../shell-overview/shell-overview.component';
+import { DataChargesService } from 'src/app/services/date/data-charges.service';
 
 
 @Component({
@@ -18,6 +21,8 @@ export class CardComponent {
 
   constructor(
     private _service: ChargesService,
+    private _dataService: DataChargesService,
+    private _bottomSheet: MatBottomSheet
   ){}
 
   handleinputEdit(event: any){
@@ -44,7 +49,8 @@ export class CardComponent {
   }
 
   handleDelete(id: number){
-    this._service.delete(id.toString()).subscribe( data => console.log(data));
+    this._dataService.sabeId(id.toString())
+    this._bottomSheet.open(ShellOverviewComponent);
     this.loanPage();
   }
 
