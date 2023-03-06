@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { ReactiveFormsModule } from '@angular/forms';
+
 import { HeaderModule } from './components/header/header.module';
 import { LayoutModule } from './pages/layout/layout.module';
 import { NavModule } from './components/nav/nav.module';
@@ -16,12 +18,15 @@ import { OpeExpensesModule } from './pages/ope-expenses/ope-expenses.module';
 import { PaymentsModule } from './pages/payments/payments.module';
 import { SalesModule } from './pages/sales/sales.module';
 import { WorkersModule } from './pages/workers/workers.module';
+import { HttpClientModule } from '@angular/common/http';
+import { CardModule } from './pages/charges/components/card/card.module';
 
 @NgModule({
   declarations: [
     AppComponent,
   ],
   imports: [
+    ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -35,7 +40,9 @@ import { WorkersModule } from './pages/workers/workers.module';
     OpeExpensesModule,
     PaymentsModule,
     SalesModule,
-    WorkersModule
+    WorkersModule,
+    HttpClientModule,
+    CardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,1 +1,12 @@
-<p>charges works!</p>
+<div class="card_div_header_container">
+  <mat-form-field class="example-full-width example-form" appearance="fill">
+    <mat-label>Buscar</mat-label>
+    <input type="text" matInput (keyup)="handleChange($event)">
+  </mat-form-field>
+  <button class="card_header_button" color="primary" mat-raised-button mat-button>
+    <mat-icon>search</mat-icon>
+  </button>
+</div>
+<div>
+  <app-card *appLoadPage="results" [charges]="results" (load)="rechargeCharges()"></app-card>
+</div>

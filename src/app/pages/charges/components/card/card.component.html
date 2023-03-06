@@ -1,0 +1,35 @@
+<mat-divider></mat-divider>
+
+<div class="card_comp_charge">
+  <mat-card *ngFor="let charge of charges" class="example-card">
+    <mat-card-header>
+      <mat-card-subtitle>Cobros</mat-card-subtitle>
+      <mat-card-title>{{charge.NOMBRE}} {{charge.APELLIDO}}</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <p>cedula {{ charge.IDENTIFICACION }}</p>
+      <p>fecha pago: {{ charge.FECHA_PAGO }}</p>
+      <p>Valor del cobro {{ charge.VALOR_COBRO }}</p>
+      <mat-form-field class="example-full-width example-form" appearance="fill"
+        *ngIf="activateIdEdit == charge.ID_COBROS">
+        <mat-label>valor a editar</mat-label>
+        <input type="number" matInput (keyup)="handleinputEdit($event)">
+      </mat-form-field>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+    <mat-card-actions>
+      <button class="card_actions_button" color="primary" mat-raised-button mat-button
+        (click)="handleEdit(charge.ID_COBROS)" *ngIf="activateIdEdit == undefined">Editar</button>
+      <button class="card_actions_button" color="accent" mat-raised-button mat-button
+        (click)="handleSutmit(charge.ID_COBROS, charge.ID_CLIENTE)" *ngIf="activateIdEdit == charge.ID_COBROS">Enviar</button>
+      <button class="card_actions_button" color="warn" mat-raised-button mat-button *ngIf="activateIdEdit == undefined"
+        (click)="handleDelete(charge.ID_COBROS)">Borrar</button>
+      <button class=" card_actions_button" color="warn" mat-raised-button mat-button
+        *ngIf="activateIdEdit == charge.ID_COBROS" (click)="handleCancel()">Cancelar</button>
+    </mat-card-actions>
+    <mat-card-footer>
+      <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
+    </mat-card-footer>
+  </mat-card>
+</div>
