@@ -6,7 +6,11 @@ const routes: Routes = [
   {
     path:'',
     component: SectorsComponent,
-  }
+  },
+  {
+    path:':name',
+    loadChildren: () => import('./components/nav/nav.module').then(m => m.NavModule),
+  },
 ];
 
 @NgModule({

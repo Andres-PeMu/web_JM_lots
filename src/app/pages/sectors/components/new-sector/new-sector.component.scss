@@ -1,0 +1,23 @@
+.nav-seccion-div {
+  display: flex;
+  box-sizing: border-box;
+  padding: 0 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+button {
+  margin: 4px;
+}
+
+.section-input-create {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 450px;
+  margin: 16px auto;
+}
+
+section {
+  margin: 8px;
+}

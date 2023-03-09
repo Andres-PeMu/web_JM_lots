@@ -1,35 +1,33 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SectorsService, getSectors } from 'src/app/services/Http/sectors.service';
 
-interface Food {
-  value: string;
-  viewValue: string;
-}
-
-interface Car {
-  value: string;
-  viewValue: string;
-}
 @Component({
   selector: 'app-sectors',
   templateUrl: './sectors.component.html',
   styleUrls: ['./sectors.component.scss']
 })
-export class SectorsComponent {
-  foods: Food[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'},
-  ];
-  cars: Car[] = [
-    {value: 'volvo', viewValue: 'Volvo'},
-    {value: 'saab', viewValue: 'Saab'},
-    {value: 'mercedes', viewValue: 'Mercedes'},
-  ];
-  foodControl = new FormControl(this.foods[2].value);
-  carControl = new FormControl(this.cars[1].value);
+export class SectorsComponent implements OnInit {
+
+  getSectors: getSectors[] = [];
+  sectors: getSectors[] = []
+  nuevo: any;
+
+  constructor(
+    private _service: SectorsService
+  ) {
+  }
+
+  ngOnInit(): void {
+    this._service.getAll().subscribe(res => {
+      this.getSectors = res;
+      this.sectors = res;
+    });
+  }
+
+  SectorSelec = new FormControl('', Validators.required);
   form = new FormGroup({
-    food: this.foodControl,
-    car: this.carControl,
+    sectors: this.SectorSelec,
   });
+
 }

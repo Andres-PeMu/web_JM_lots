@@ -1,0 +1,30 @@
+<section>
+  <div class=" nav-seccion-div ">
+    <button (click)="activateNewSector()" mat-raised-button color="primary">CREAR SECTOR</button>
+  </div>
+</section>
+
+<section *ngIf="activateNewSectorButton">
+  <form [formGroup]="newSector" class="section-input-create">
+    <mat-form-field appearance="fill">
+      <mat-label>NOMBRE DEL SECTOR</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+    <mat-error *ngIf="newSector.get('name')?.errors && newSector.get('name')?.touched">
+      <p>el nombre es requerido</p>
+    </mat-error>
+    <mat-form-field appearance="fill">
+      <mat-label>NUMERO DE LOTES</mat-label>
+      <input type="number" matInput formControlName="lotNumber">
+    </mat-form-field>
+    <mat-error *ngIf="newSector.get('lotNumber')?.errors && newSector.get('lotNumber')?.touched">
+      <p color=" warn " >el numero de lotes es requerido</p>
+    </mat-error>
+    <button mat-raised-button color="accent" [disabled]="newSector.invalid" (click)="createNewSector()">Crear</button>
+  </form>
+</section>
+
+<section>
+  <app-card-sector></app-card-sector>
+</section>
+
