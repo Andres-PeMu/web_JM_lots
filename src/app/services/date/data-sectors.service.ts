@@ -5,12 +5,22 @@ import { Injectable } from '@angular/core';
 })
 export class DataSectorsService {
 
-  id:string = ''
+  id:string = '';
+  name:string = '';
+  numberLot: number = 0;
 
   constructor() { }
 
-  sabeId(id: string){
+  saveId(id: string){
     this.id = id;
+  }
+
+  saveName(name: string){
+    this.name = name;
+  }
+
+  saveNumber(numberLot: number){
+    this.numberLot = numberLot;
   }
 
 }

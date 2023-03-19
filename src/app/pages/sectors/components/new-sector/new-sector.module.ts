@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CardSectorModule } from "../card-sector/card-sector.module";
+import { CardSectorModule } from "../cards/card-sector.module";
 
 
 @NgModule({

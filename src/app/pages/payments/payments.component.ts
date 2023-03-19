@@ -22,9 +22,8 @@ export class PaymentsComponent implements OnInit{
     });
   }
 
-  handleChange(event: any) {
-    const query = event.target.value.toLowerCase();
-    console.log(query)
+  handleChange(event: Event) {
+    const query = (event.target as HTMLInputElement).value.toLowerCase();
     if (query.length !== 0) {
       this.results = this.getPayments.filter(d => d.NOMBRE.toLowerCase().indexOf(query) > -1);
       if (this.results.length == 0) {

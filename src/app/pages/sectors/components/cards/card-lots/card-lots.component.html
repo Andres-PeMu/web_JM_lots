@@ -1,0 +1,60 @@
+<mat-divider></mat-divider>
+
+<div class="card_comp_charge">
+  <mat-card *ngFor="let lot of lots" class="example-card">
+    <mat-card-header>
+      <mat-card-subtitle>lotes</mat-card-subtitle>
+      <mat-card-title>
+        <div *ngFor="let customer of getCustomers">
+          <mat-card-title *ngIf="lot.ID_CLIENTE == customer.ID_CLIENTES">{{ customer.NOMBRE }} {{ customer.APELLIDO
+            }}</mat-card-title>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <p>numero de lote: {{ lot.NUMERO_LOTE }}</p>
+      <p>valor del lote: {{ lot.VALOR_LOTE }}</p>
+      <section [formGroup]="formEditSector" class="example-full-width example-form" appearance="fill"
+        *ngIf="activateIdEdit == lot.NUMERO_LOTE">
+        <mat-form-field>
+          <mat-label>Valor del lote</mat-label>
+          <input matInput formControlName="lotValue" required>
+          <mat-error
+            *ngIf="formEditSector.get('lotValue')?.invalid && (formEditSector.get('lotValue')?.dirty || formEditSector.get('lotValue')?.touched)">
+            El valor del lote es requerido
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Cliente</mat-label>
+          <input matInput formControlName="id_customer" [matAutocomplete]="auto" required>
+          <mat-error
+            *ngIf="formEditSector.get('id_customer')?.invalid && (formEditSector.get('id_customer')?.dirty || formEditSector.get('id_customer')?.touched)">
+            El cliente es requerido
+          </mat-error>
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let result of filteredOptions | async" [value]="result.ID_CLIENTES">
+              <p>{{ result.IDENTIFICACION }} {{ result.NOMBRE }} {{ result.APELLIDO }}</p>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </section>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+    <mat-card-actions>
+      <button class="card_actions_button" color="primary" mat-raised-button mat-button
+        (click)="handleEdit(lot.NUMERO_LOTE)" *ngIf="activateIdEdit == undefined">Editar</button>
+      <button class="card_actions_button" color="accent" mat-raised-button mat-button
+        (click)="handleSutmit( lot.NUMERO_LOTE )" *ngIf="activateIdEdit == lot.NUMERO_LOTE && !lot.ID_CLIENTE"
+        [disabled]="formEditSector.invalid">Enviar</button>
+      <button class="card_actions_button" color="accent" mat-raised-button mat-button
+        (click)="handleEditSutmit( lot.NUMERO_LOTE, lot.ID_LOTES )" *ngIf="activateIdEdit == lot.NUMERO_LOTE && lot.ID_CLIENTE"
+        [disabled]="formEditSector.invalid">Enviar</button>
+      <button class=" card_actions_button" color="warn" mat-raised-button mat-button
+        *ngIf="activateIdEdit == lot.NUMERO_LOTE" (click)="handleCancel()">Cancelar</button>
+    </mat-card-actions>
+    <mat-card-footer>
+      <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
+    </mat-card-footer>
+  </mat-card>
+</div>

@@ -1,0 +1,149 @@
+<mat-divider></mat-divider>
+
+<div class="card_comp_charge">
+  <mat-card *ngFor="let oE of OperationalExpenses" class="example-card">
+    <mat-card-header>
+      <mat-card-subtitle>lotes</mat-card-subtitle>
+      <mat-card-title>
+        <div *ngFor="let worker of getWorkers">
+          <mat-card-title *ngIf="oE.ID_TRABAJADOR== worker.ID_TRABAJADORES">{{ worker.NOMBRE }} {{ worker.APELLIDO
+            }}</mat-card-title>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <div class="oe-card-content-div-section">
+        <section>
+          <p>tipo de gasto: {{ oE.TIPO_GASTO }}</p>
+          <p>valor de la hora: {{ oE.VALOR_HORA }}</p>
+          <p>horas trabajadas: {{ oE.HORAS_TRABAJADAS }}</p>
+          <p>valor total: {{ oE.VALOR_TOTAL }}</p>
+          <p>trabajador: {{ oE.ID_TRABAJADOR }}</p>
+        </section>
+        <section>
+          <app-table-oexpenses [idWorker]="oE.ID_TRABAJADOR" [idOperationalExpenses]="oE.ID_GASTOS"
+            (readOE)="handleRead()"></app-table-oexpenses>
+        </section>
+      </div>
+      <section [formGroup]="formEditOe" class="example-full-width example-form" appearance="fill"
+        *ngIf="activateIdEdit == oE.ID_GASTOS">
+        <mat-form-field>
+          <mat-label>Tipo de gasto</mat-label>
+          <input matInput formControlName="expenseType" required>
+          <mat-error
+            *ngIf="formEditOe.get('expenseType')?.invalid && (formEditOe.get('expenseType')?.dirty || formEditOe.get('expenseType')?.touched)">
+            El tipo de gasto es requerido
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Valor de la hora</mat-label>
+          <input matInput formControlName="hourValue" required>
+          <mat-error
+            *ngIf="formEditOe.get('hourValue')?.invalid && (formEditOe.get('hourValue')?.dirty || formEditOe.get('hourValue')?.touched)">
+            El valor de la hora es requerido
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Horas Trabajadas</mat-label>
+          <input matInput formControlName="hourValueWorked" required>
+          <mat-error
+            *ngIf="formEditOe.get('hourValueWorked')?.invalid && (formEditOe.get('hourValueWorked')?.dirty || formEditOe.get('hourValueWorked')?.touched)">
+            Las hojas trabajadas son requeridas
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Trabajador</mat-label>
+          <input matInput formControlName="idWorker" [matAutocomplete]="auto" required>
+          <mat-error
+            *ngIf="formEditOe.get('idWorker')?.invalid && (formEditOe.get('idWorker')?.dirty || formEditOe.get('idWorker')?.touched)">
+            El trabajador es requerido
+          </mat-error>
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let result of filteredOptions | async" [value]="result.ID_TRABAJADORES">
+              <p>{{ result.IDENTIFICACION }} {{ result.NOMBRE }} {{ result.APELLIDO }}</p>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </section>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+    <mat-card-actions>
+      <button class="card_actions_button" color="primary" mat-raised-button mat-button
+        (click)="handleEdit(oE.ID_GASTOS)" *ngIf="activateIdEdit == undefined">Editar</button>
+      <button class="card_actions_button" color="accent" mat-raised-button mat-button
+        (click)="handleEditSutmit( oE.ID_GASTOS )" *ngIf="activateIdEdit == oE.ID_GASTOS"
+        [disabled]="formEditOe.invalid">Enviar</button>
+      <button class=" card_actions_button" color="warn" mat-raised-button mat-button
+        *ngIf="activateIdEdit == oE.ID_GASTOS" (click)="handleCancel()">Cancelar</button>
+    </mat-card-actions>
+    <mat-card-footer>
+      <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
+    </mat-card-footer>
+  </mat-card>
+
+  <mat-divider></mat-divider>
+
+  <div>
+    <mat-card class="example-card" [@detailExpand]="isExpanded ? 'expanded' : 'collapsed'" *ngIf="isExpanded">
+      <mat-card-header>
+        <mat-card-subtitle>gastos operaciones</mat-card-subtitle>
+        <mat-card-title>Ingrese un nuevo gasto</mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <section [formGroup]="formEditOe" class="example-full-width example-form" appearance="fill">
+          <mat-form-field>
+            <mat-label>Tipo de gasto</mat-label>
+            <input matInput formControlName="expenseType" required>
+            <mat-error
+              *ngIf="formEditOe.get('expenseType')?.invalid && (formEditOe.get('expenseType')?.dirty || formEditOe.get('expenseType')?.touched)">
+              El tipo de gasto es requerido
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Valor de la hora</mat-label>
+            <input matInput formControlName="hourValue" required>
+            <mat-error
+              *ngIf="formEditOe.get('hourValue')?.invalid && (formEditOe.get('hourValue')?.dirty || formEditOe.get('hourValue')?.touched)">
+              El valor de la hora es requerido
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Horas Trabajadas</mat-label>
+            <input matInput formControlName="hourValueWorked" required>
+            <mat-error
+              *ngIf="formEditOe.get('hourValueWorked')?.invalid && (formEditOe.get('hourValueWorked')?.dirty || formEditOe.get('hourValueWorked')?.touched)">
+              Las hojas trabajadas son requeridas
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Trabajador</mat-label>
+            <input matInput formControlName="idWorker" [matAutocomplete]="auto" required>
+            <mat-error
+              *ngIf="formEditOe.get('idWorker')?.invalid && (formEditOe.get('idWorker')?.dirty || formEditOe.get('idWorker')?.touched)">
+              El trabajador es requerido
+            </mat-error>
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+              <mat-option *ngFor="let result of filteredOptions | async" [value]="result.ID_TRABAJADORES">
+                <p>{{ result.IDENTIFICACION }} {{ result.NOMBRE }} {{ result.APELLIDO }}</p>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </section>
+        <mat-divider></mat-divider>
+      </mat-card-content>
+      <mat-card-actions>
+        <button class="card_actions_button" color="primary" mat-raised-button mat-button
+          (click)="handleSaveNew()">Guardar</button>
+        <button class="card_actions_button" color="warn" mat-raised-button mat-button
+          (click)="handleNewPayment()">Cancelar</button>
+      </mat-card-actions>
+      <mat-card-footer>
+        <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
+      </mat-card-footer>
+    </mat-card>
+  </div>
+  <button *ngIf="!isExpanded" class="card_actions_button" color="primary" mat-raised-button mat-button
+    (click)="handleNewPayment()">Nuevo Gasto operacional</button>
+</div>

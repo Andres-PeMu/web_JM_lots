@@ -10,13 +10,12 @@ import { ShellOverviewComponent } from './components/shell-overview/shell-overvi
 import { ReactiveFormsModule } from '@angular/forms';
 import { NavModule } from './components/nav/nav.module';
 import { NewSectorModule } from './components/new-sector/new-sector.module';
-import { CardSectorModule } from './components/card-sector/card-sector.module';
-import { LotsComponent } from './components/lots/lots.component';
+
 
 
 
 @NgModule({
-  declarations: [SectorsComponent, ShellOverviewComponent, LotsComponent],
+  declarations: [SectorsComponent, ShellOverviewComponent ],
   imports: [
     CommonModule,
     SectorsRoutingModule,
@@ -24,9 +23,8 @@ import { LotsComponent } from './components/lots/lots.component';
     ReactiveFormsModule,
     NavModule,
     NewSectorModule,
-    CardSectorModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   exports: [SectorsComponent]
 })

@@ -42,7 +42,6 @@ import { CardModule } from './pages/charges/components/card/card.module';
     SalesModule,
     WorkersModule,
     HttpClientModule,
-    CardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

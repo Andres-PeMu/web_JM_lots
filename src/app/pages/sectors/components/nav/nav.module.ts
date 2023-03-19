@@ -4,16 +4,22 @@ import { CommonModule } from '@angular/common';
 import { NavRoutingModule } from './nav-routing.module';
 import { NavComponent } from './nav.component';
 import { MatButtonModule } from '@angular/material/button';
+import { LotsComponent } from '../lots/lots.component';
+import { OperationalExpensesComponent } from '../operational-expenses/operational-expenses.component';
+import { WorkersComponent } from '../workers/workers.component';
+import { PaymentsComponent } from '../payments/payments.component';
+import { CardSectorModule } from "../cards/card-sector.module";
 
 
 
 @NgModule({
-  declarations: [NavComponent],
-  imports: [
-    CommonModule,
-    NavRoutingModule,
-    MatButtonModule
-  ],
-  exports: [NavComponent]
+    declarations: [NavComponent, LotsComponent, OperationalExpensesComponent, WorkersComponent, PaymentsComponent],
+    exports: [NavComponent],
+    imports: [
+        CommonModule,
+        NavRoutingModule,
+        MatButtonModule,
+        CardSectorModule,
+    ]
 })
 export class NavModule { }

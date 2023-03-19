@@ -12,6 +12,7 @@ export interface getPayments {
   "VALOR_PAGO": number,
   "ID_TRABAJOR": number,
   "ID_GASTOS_OPERACIONES": number,
+  "FECHA_DE_PAGO"?: string,
 }
 
 export interface getPaymentsAndWorkerAndOe {
@@ -47,6 +48,10 @@ export class PaymentsService {
 
   getAndWorkerAndOEAll() {
     return this.http.get<getPaymentsAndWorkerAndOe[]>(`${this.apiUrl}/payments/worker/oe`)
+  }
+
+  getAndWorker(id: number) {
+    return this.http.get<getPayments[]>(`${this.apiUrl}/payments/worker/${id}`)
   }
 
   getOne(id: number) {

@@ -22,12 +22,27 @@ export class NewSectorComponent {
     });
   }
 
-  createNewSector(){
-    this._service.create(this.newSector.value).subscribe(res => console.log(res))
+  createNewSector() {
+    let data = this.newSector.value;
+    data = this.convertToUppercase(data);
+    this._service.create(data).subscribe(res => {
+      console.log(res)
+      window.location.reload()
+    });
   }
 
-  activateNewSector(){
+  activateNewSector() {
     this.activateNewSectorButton = !this.activateNewSectorButton;
+  }
+
+  convertToUppercase(object: { [x: string]: string; }) {
+    for (let propiedad in object) {
+      if (typeof object[propiedad] === 'string') {
+        object[propiedad] = object[propiedad].replace(/\s+/g, '_');
+        object[propiedad] = object[propiedad].toUpperCase();
+      }
+    }
+    return object;
   }
 
 }
