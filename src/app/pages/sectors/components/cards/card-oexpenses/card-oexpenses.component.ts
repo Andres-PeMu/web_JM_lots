@@ -1,11 +1,14 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
 import { OpeExpensesService, getOe } from 'src/app/services/Http/ope-expenses.service';
 import { WorkersService, getWorkers } from 'src/app/services/Http/workers.service';
 import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
+import { ShellOverviewOEComponent } from '../../shell-overview-oe/shell-overview-oe.component';
+import { DataOEService } from 'src/app/services/date/data-oe.service';
 
 @Component({
   selector: 'app-card-oexpenses',
@@ -39,8 +42,9 @@ export class CardOexpensesComponent {
 
   constructor(
     private _dataSectors: DataSectorsService,
+    private _dataOE: DataOEService,
     private fb: FormBuilder,
-    // private _bottomSheet: MatBottomSheet,
+    private _bottomSheet: MatBottomSheet,
     private  router: Router,
     private _serviceWorkers: WorkersService,
     private _service: OpeExpensesService
@@ -110,9 +114,9 @@ export class CardOexpensesComponent {
   }
 
   handleDelete(id: number) {
-    // this._dataSectors.saveId(id.toString())
-    // // this._bottomSheet.open(ShellOverviewComponent);
-    // this.loanPage();
+    this._dataOE.sabeId(id.toString());
+    this._bottomSheet.open(ShellOverviewOEComponent);
+    this.loanPage();
   }
 
   loanPage() {

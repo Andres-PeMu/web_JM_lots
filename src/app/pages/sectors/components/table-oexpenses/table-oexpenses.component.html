@@ -30,9 +30,9 @@
         <button class="card_actions_button" color="primary" mat-raised-button mat-button (click)="handleEdit(element)"
           *ngIf="!stateEdit.tr">Editar</button>
         <button class="card_actions_button " color="primary" mat-raised-button mat-button
-          (click)="handleSave(element.id)" *ngIf="stateEdit.tr && element.n ==stateEdit.n">Guardar</button>
+          (click)="handleSave(element.idPago)" *ngIf="stateEdit.tr && element.n ==stateEdit.n">Guardar</button>
         <button class=" card_actions_button " color="warn" mat-raised-button mat-button *ngIf="!stateEdit.tr"
-          (click)="handleDelete(element.id)">Eliminar</button>
+          (click)="handleDelete(element.idPago, element.idGop)">Eliminar</button>
         <button class=" card_actions_button " color="warn" mat-raised-button mat-button
           *ngIf="stateEdit.tr && element.n ==stateEdit.n" (click)="handleEdit(element)">Cancelar</button>
       </td>

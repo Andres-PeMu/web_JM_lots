@@ -22,7 +22,7 @@
           <p>trabajador: {{ oE.ID_TRABAJADOR }}</p>
         </section>
         <section>
-          <app-table-oexpenses [idWorker]="oE.ID_TRABAJADOR" [idOperationalExpenses]="oE.ID_GASTOS"
+          <app-table-oexpenses  [idWorker]="oE.ID_TRABAJADOR" [idOperationalExpenses]="oE.ID_GASTOS"
             (readOE)="handleRead()"></app-table-oexpenses>
         </section>
       </div>
@@ -71,6 +71,8 @@
     <mat-card-actions>
       <button class="card_actions_button" color="primary" mat-raised-button mat-button
         (click)="handleEdit(oE.ID_GASTOS)" *ngIf="activateIdEdit == undefined">Editar</button>
+        <button class="card_actions_button" color="warn" mat-raised-button mat-button
+        (click)="handleDelete(oE.ID_GASTOS)" *ngIf="activateIdEdit == undefined">Eliminar</button>
       <button class="card_actions_button" color="accent" mat-raised-button mat-button
         (click)="handleEditSutmit( oE.ID_GASTOS )" *ngIf="activateIdEdit == oE.ID_GASTOS"
         [disabled]="formEditOe.invalid">Enviar</button>

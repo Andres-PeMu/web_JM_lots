@@ -81,8 +81,11 @@ export class CardLotsComponent {
       id_sector,
       lotNumber,
     }
-    this._service.create(data).subscribe(res => console.log(res));
-    this.readLot.emit();
+    console.log(data)
+    this._service.create(data).subscribe(res => {
+      console.log(res);
+      this.readLot.emit();
+    });
   }
 
   handleEditSutmit( lotNumber: number, idLot: number ) {
@@ -93,8 +96,10 @@ export class CardLotsComponent {
       id_sector,
       lotNumber,
     }
-    this._service.update(idLot.toString(), data).subscribe(res => console.log(res));
-    this.readLot.emit();
+    this._service.update(idLot.toString(), data).subscribe(res => {
+      console.log(res);
+      this.readLot.emit();
+    });
   }
 
   handleCancel() {

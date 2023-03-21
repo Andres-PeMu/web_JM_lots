@@ -59,7 +59,7 @@ export class PaymentsService {
   }
 
   create(dto: createPayments) {
-    return this.http.post<createPayments>(`${this.apiUrl}/payments`, dto);
+    return this.http.post<getPayments>(`${this.apiUrl}/payments`, dto);
   }
 
   update(id: string, dto: createPayments) {

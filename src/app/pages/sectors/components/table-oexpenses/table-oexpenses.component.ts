@@ -1,14 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { PaymentsService, getPayments } from 'src/app/services/Http/payments.service';
+import { PaymentsService } from 'src/app/services/Http/payments.service';
 
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { OpwService, getPaymentsAndWorkerAndOe } from 'src/app/services/Http/opw.service';
 
 export interface PeriodicElement {
   n: number;
   paymentValue: number;
   date: string;
-  id?: number
+  idPago?: number;
+  idGop?: number
 }
 
 @Component({
@@ -55,10 +57,12 @@ export class TableOexpensesComponent implements OnInit {
   };
 
   ELEMENT_DATA: PeriodicElement[] = [];
-  result: getPayments[] = []
+  result: getPaymentsAndWorkerAndOe[] = []
   dataSource: PeriodicElement[] = []
+  displayedColumns: string[] = ['n', 'paymentValue', 'date', 'expand'];
 
   constructor(
+    private _serviceOpw: OpwService,
     private _service: PaymentsService,
   ) {
     this.editPaymentValue = new FormGroup({
@@ -70,16 +74,17 @@ export class TableOexpensesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = Number(this.idWorker);
-    this._service.getAndWorker(id).subscribe((res: getPayments[]) => {
+    const id = Number(this.idOperationalExpenses);
+    this._serviceOpw.getOneOe(id).subscribe((res: getPaymentsAndWorkerAndOe[]) => {
       this.result = res;
-      this.result.forEach((res: getPayments, index: number) => {
+      this.result.forEach((res: getPaymentsAndWorkerAndOe, index: number) => {
         this.ELEMENT_DATA!.push(
           {
             n: index + 1,
             paymentValue: res.VALOR_PAGO,
             date: res.FECHA_DE_PAGO!,
-            id: res.ID_PAGOS,
+            idPago: res.ID_PAGOS,
+            idGop: res.ID_GOP,
           })
       });
       this.dataSource = this.ELEMENT_DATA;
@@ -104,8 +109,13 @@ export class TableOexpensesComponent implements OnInit {
     });
   }
 
-  handleDelete(id: number){
-    this._service.delete(id.toString()).subscribe(res => console.log(res));
+  handleDelete(idPago: number, idGop: number){
+    console.log(idPago)
+    console.log(idGop)
+    this._serviceOpw.delete(idGop.toString()).subscribe(res => {
+      console.log(res);
+      this._service.delete(idPago.toString()).subscribe(res => console.log(res));
+    });
     this.readOE.emit();
   }
 
@@ -122,11 +132,14 @@ export class TableOexpensesComponent implements OnInit {
       "idOperationalExpenses": this.idOperationalExpenses,
     };
     this._service.create(dto).subscribe(res =>{
-      console.log(res);
+      console.log(res.ID_PAGOS);
+      this._serviceOpw.create({
+        "idOE": this.idOperationalExpenses,
+        "idPayment": res.ID_PAGOS,
+        "idWorker": this.idWorker,
+      }).subscribe(res => console.log(res))
       this.readOE.emit();
     })
   }
-
-  displayedColumns: string[] = ['n', 'paymentValue', 'date', 'expand'];
 
 }
