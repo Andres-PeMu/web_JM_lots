@@ -1,0 +1,129 @@
+<app-string-modal [modalString]="modalString" [seeModal]="seeModal" (closeMode)="closeMode()" ></app-string-modal>
+<mat-divider></mat-divider>
+
+<div class="card_comp_charge" *ngIf="!seeModal">
+  <div>
+    <mat-card class="example-card" [@fade] [@detailExpand]="isExpanded ? 'expanded' : 'collapsed'" *ngIf="isExpanded">
+      <mat-card-header>
+        <mat-card-subtitle>gastos operaciones</mat-card-subtitle>
+        <mat-card-title>Ingrese un nuevo gasto</mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <section [formGroup]="formEditWorker" class="example-full-width example-form" appearance="fill">
+          <mat-form-field>
+            <mat-label>Identificacion</mat-label>
+            <input matInput formControlName="identification" required>
+            <mat-error
+              *ngIf="formEditWorker.get('identification')?.invalid && (formEditWorker.get('identification')?.dirty || formEditWorker.get('identification')?.touched)">
+              la identificacion es requerido
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="name" required>
+            <mat-error
+              *ngIf="formEditWorker.get('name')?.invalid && (formEditWorker.get('name')?.dirty || formEditWorker.get('name')?.touched)">
+              El Nombre es requerido
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Apellido</mat-label>
+            <input matInput formControlName="lastName" required>
+            <mat-error
+              *ngIf="formEditWorker.get('lastName')?.invalid && (formEditWorker.get('lastName')?.dirty || formEditWorker.get('lastName')?.touched)">
+              El Apellido es requeridas
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Correo</mat-label>
+            <input matInput formControlName="email" required>
+            <mat-error
+              *ngIf="formEditWorker.get('email')?.invalid && (formEditWorker.get('email')?.dirty || formEditWorker.get('email')?.touched)">
+              El correo es requeridas
+            </mat-error>
+          </mat-form-field>
+        </section>
+        <mat-divider></mat-divider>
+      </mat-card-content>
+      <mat-card-actions>
+        <button class="card_actions_button" color="primary" mat-raised-button mat-button
+          (click)="handleSaveNew()" [disabled]="formEditWorker.invalid" >Guardar</button>
+        <button class="card_actions_button" color="warn" mat-raised-button mat-button
+          (click)="handleNewPayment()">Cancelar</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  <button *ngIf="!isExpanded" class="card_actions_button" color="primary" mat-raised-button mat-button
+    (click)="handleNewPayment()">Nuevo trabajador</button>
+
+  <mat-divider></mat-divider>
+
+  <mat-card *ngFor="let worker of workers" class="example-card">
+    <mat-card-header>
+      <mat-card-subtitle>lotes</mat-card-subtitle>
+      <mat-card-title>
+        <mat-card-title> {{ worker.NOMBRE }} {{ worker.APELLIDO }}</mat-card-title>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <div class="oe-card-content-div-section">
+        <section>
+          <p>IDENTIFICACION: {{ worker.IDENTIFICACION }}</p>
+          <p>CORREO: {{ worker.CORREO }}</p>
+        </section>
+      </div>
+      <section [formGroup]="formEditWorker" class="example-full-width example-form" appearance="fill"
+        *ngIf="activateIdEdit == worker.ID_TRABAJADORES">
+        <mat-form-field>
+          <mat-label>Identificacion</mat-label>
+          <input matInput formControlName="identification" required>
+          <mat-error
+            *ngIf="formEditWorker.get('identification')?.invalid && (formEditWorker.get('identification')?.dirty || formEditWorker.get('identification')?.touched)">
+            La Identificacion es requerido
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-error
+            *ngIf="formEditWorker.get('name')?.invalid && (formEditWorker.get('name')?.dirty || formEditWorker.get('name')?.touched)">
+            El Nombre es requerido
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Apellido</mat-label>
+          <input matInput formControlName="lastName" required>
+          <mat-error
+            *ngIf="formEditWorker.get('lastName')?.invalid && (formEditWorker.get('lastName')?.dirty || formEditWorker.get('lastName')?.touched)">
+            El Apellido es requeridas
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Correo</mat-label>
+          <input matInput formControlName="email" required>
+          <mat-error
+            *ngIf="formEditWorker.get('email')?.invalid && (formEditWorker.get('email')?.dirty || formEditWorker.get('email')?.touched)">
+            El correo es requeridas
+          </mat-error>
+        </mat-form-field>
+      </section>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+    <mat-card-actions>
+      <button class="card_actions_button" color="primary" mat-raised-button mat-button
+        (click)="handleEdit(worker)" *ngIf="activateIdEdit == undefined">Editar</button>
+      <button class="card_actions_button" color="warn" mat-raised-button mat-button
+        (click)="handleDelete(worker.ID_TRABAJADORES)" *ngIf="activateIdEdit == undefined">Eliminar</button>
+      <button class="card_actions_button" color="accent" mat-raised-button mat-button
+        (click)="handleEditSutmit( worker.ID_TRABAJADORES )" *ngIf="activateIdEdit == worker.ID_TRABAJADORES"
+        [disabled]="formEditWorker.invalid">Enviar</button>
+      <button class=" card_actions_button" color="warn" mat-raised-button mat-button
+        *ngIf="activateIdEdit == worker.ID_TRABAJADORES" (click)="handleCancel()">Cancelar</button>
+    </mat-card-actions>
+    <mat-card-footer>
+      <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
+    </mat-card-footer>
+  </mat-card>
+</div>

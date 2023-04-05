@@ -4,7 +4,7 @@
   </div>
 </section>
 
-<section *ngIf="activateNewSectorButton">
+<section *ngIf="activateNewSectorButton" [@fade]>
   <form [formGroup]="newSector" class="section-input-create">
     <mat-form-field appearance="fill">
       <mat-label>NOMBRE DEL SECTOR</mat-label>

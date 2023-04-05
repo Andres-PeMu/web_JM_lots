@@ -6,6 +6,12 @@ export interface createChargues {
   id_customer: number;
 }
 
+export interface resultnewChargues {
+	ID_COBROS: number,
+	VALOR_COBRO: number,
+	ID_CLIENTE: number,
+}
+
 export interface getChargues {
   ID_COBROS: number;
   ID_CLIENTE: number;
@@ -65,7 +71,7 @@ export class ChargesService {
   }
 
   create(dto: createChargues) {
-    return this.http.post<createChargues>(`${this.apiUrl}/charges`, dto);
+    return this.http.post<resultnewChargues>(`${this.apiUrl}/charges`, dto);
   }
 
   update(id: string, dto: createChargues) {

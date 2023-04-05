@@ -13,7 +13,7 @@ export class NavComponent implements OnInit {
   lost: boolean = false;
   oExpenses: boolean = false;
   workers: boolean = false;
-  payments: boolean = false;
+  customers: boolean = false;
 
   constructor(
     private _service: SectorsService,
@@ -31,28 +31,25 @@ export class NavComponent implements OnInit {
     this.lost = !this.lost;
     this.oExpenses = false;
     this.workers = false;
-    this.payments = false;
+    this.customers = false;
   }
 
   handleOExpenses(){
     this.lost = false;
     this.oExpenses = !this.oExpenses;
     this.workers = false;
-    this.payments = false;
+    this.customers = false;
   }
 
   handleWorkers(){
     this.lost = false;
     this.oExpenses = false;
     this.workers = !this.workers;
-    this.payments = false;
+    this.customers = false;
   }
 
-  handlePayments(){
-    this.lost = false;
-    this.oExpenses = false;
-    this.workers = false;
-    this.payments = !this.payments;
+  handleCustomers(){
+
   }
 
 }

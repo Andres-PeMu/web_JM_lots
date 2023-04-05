@@ -5,9 +5,12 @@ import { Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
 import { CustomersService, getCustomers } from 'src/app/services/Http/customers.service';
 import { LotsService, getLots } from 'src/app/services/Http/lots.service';
+import { SalesService } from 'src/app/services/Http/sales.service';
 import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
+import { ShellOverviewLotsComponent } from '../../shell-overview/shell-overview-lots/shell-overview-lots.component';
+import { DataLotsService } from 'src/app/services/date/data-lots.service';
 
-export interface formEditSector{
+export interface formEditSector {
   "lotValue": string,
   "id_customer": string,
 }
@@ -25,6 +28,7 @@ export class CardLotsComponent {
   valueInputEdit: string = '';
   activateInputEdit: boolean = false;
   activateIdEdit: number | undefined;
+  dataSales: getLots | undefined;
 
   getCustomers: getCustomers[] = [];
   results: getCustomers[] | undefined = []
@@ -33,22 +37,24 @@ export class CardLotsComponent {
   @Input() lots: getLots[] = []
 
   constructor(
-    private _service: LotsService,
+    private _serviceLots: LotsService,
+    private _serviceCustomer: CustomersService,
+    private _serviceSales: SalesService,
     private _dataSectors: DataSectorsService,
     private fb: FormBuilder,
+    private router: Router,
     private _bottomSheet: MatBottomSheet,
-    private  router: Router,
-    private _serviceC: CustomersService
-  ) {}
+    private _dataLots: DataLotsService
+  ) { }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   ngOnInit(): void {
     this.formEditSector = this.fb.group({
       lotValue: ['', Validators.required],
       id_customer: ['', Validators.required]
     });
-    this._serviceC.getAll().subscribe(res => {
+    this._serviceCustomer.getAll().subscribe(res => {
       this.getCustomers = res;
       this.results = res;
     });
@@ -69,11 +75,13 @@ export class CardLotsComponent {
     this.router.navigate(['/sectors/', nameSector]);
   }
 
-  handleEdit(id: number) {
+  handleEdit(id: number, lotValue: number, idcustomer: number) {
+    this.formEditSector.controls['lotValue'].setValue(lotValue);
+    this.formEditSector.controls['id_customer'].setValue(idcustomer);
     this.activateIdEdit = id;
   }
 
-  handleSutmit( lotNumber: number ) {
+  handleSutmit(lotNumber: number) {
     let data = this.formEditSector.value;
     const id_sector = Number(this._dataSectors.id)
     data = {
@@ -82,13 +90,20 @@ export class CardLotsComponent {
       lotNumber,
     }
     console.log(data)
-    this._service.create(data).subscribe(res => {
+    this._serviceLots.create(data).subscribe(res => {
       console.log(res);
-      this.readLot.emit();
+      this._serviceSales.create({
+        salesValue: data.lotValue,
+        id_lots: res.ID_LOTES,
+        id_customer: data.id_customer,
+      }).subscribe(res => {
+        console.log(res);
+        this.readLot.emit();
+      });
     });
   }
 
-  handleEditSutmit( lotNumber: number, idLot: number ) {
+  handleEditSutmit(lotNumber: number, idLot: number) {
     let data = this.formEditSector.value;
     const id_sector = Number(this._dataSectors.id)
     data = {
@@ -96,9 +111,17 @@ export class CardLotsComponent {
       id_sector,
       lotNumber,
     }
-    this._service.update(idLot.toString(), data).subscribe(res => {
-      console.log(res);
-      this.readLot.emit();
+    this._serviceLots.update(idLot.toString(), data).subscribe(res => {
+        this.dataSales = res;
+        console.log(this.dataSales)
+        this._serviceSales.update(this.dataSales.ID_LOTES.toString(), {
+          salesValue: this.dataSales.VALOR_LOTE!,
+          id_lots: this.dataSales.ID_LOTES!,
+          id_customer: data.id_customer,
+        }).subscribe(res => {
+          console.log(res);
+          this.readLot.emit();
+        })
     });
   }
 
@@ -106,10 +129,9 @@ export class CardLotsComponent {
     this.activateIdEdit = undefined;
   }
 
-  handleDelete(id: number) {
-    this._dataSectors.saveId(id.toString())
-    // this._bottomSheet.open(ShellOverviewComponent);
-    this.loanPage();
+  handleDelete(idLot: number) {
+    this._dataLots.sabeId(idLot.toString());
+    this._bottomSheet.open(ShellOverviewLotsComponent);
   }
 
   loanPage() {
@@ -139,6 +161,10 @@ export class CardLotsComponent {
       return this.results;
     }
     return this.results = this.getCustomers;
+  }
+
+  handleRead(){
+    this.readLot.emit();
   }
 
 }

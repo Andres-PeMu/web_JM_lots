@@ -7,7 +7,7 @@ import { Observable, map, startWith } from 'rxjs';
 import { OpeExpensesService, getOe } from 'src/app/services/Http/ope-expenses.service';
 import { WorkersService, getWorkers } from 'src/app/services/Http/workers.service';
 import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
-import { ShellOverviewOEComponent } from '../../shell-overview-oe/shell-overview-oe.component';
+import { ShellOverviewOEComponent } from '../../shell-overview/shell-overview-oe/shell-overview-oe.component';
 import { DataOEService } from 'src/app/services/date/data-oe.service';
 
 @Component({
@@ -19,6 +19,15 @@ import { DataOEService } from 'src/app/services/date/data-oe.service';
       state('collapsed', style({height: '0px', minHeight: '0'})),
       state('expanded', style({height: '*'})),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+    trigger('fade', [
+      transition('void => *', [
+        style({ opacity: 0 }),
+        animate(500, style({ opacity: 1 }))
+      ]),
+      transition('* => void', [
+        animate(500, style({ opacity: 0 }))
+      ])
     ]),
   ]
 })
@@ -45,7 +54,6 @@ export class CardOexpensesComponent {
     private _dataOE: DataOEService,
     private fb: FormBuilder,
     private _bottomSheet: MatBottomSheet,
-    private  router: Router,
     private _serviceWorkers: WorkersService,
     private _service: OpeExpensesService
   ) {}

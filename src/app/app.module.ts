@@ -12,14 +12,11 @@ import { LayoutModule } from './pages/layout/layout.module';
 import { NavModule } from './components/nav/nav.module';
 import { SectorsModule } from './pages/sectors/sectors.module';
 import { ChargesModule } from './pages/charges/charges.module';
-import { CustomersModule } from './pages/customer/customers.module';
-import { LostModule } from './pages/lots/lost.module';
-import { OpeExpensesModule } from './pages/ope-expenses/ope-expenses.module';
 import { PaymentsModule } from './pages/payments/payments.module';
-import { SalesModule } from './pages/sales/sales.module';
 import { WorkersModule } from './pages/workers/workers.module';
 import { HttpClientModule } from '@angular/common/http';
-import { CardModule } from './pages/charges/components/card/card.module';
+import { LoginModule } from './pages/login/login.module';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -35,15 +32,14 @@ import { CardModule } from './pages/charges/components/card/card.module';
     NavModule,
     SectorsModule,
     ChargesModule,
-    CustomersModule,
-    LostModule,
-    OpeExpensesModule,
     PaymentsModule,
-    SalesModule,
     WorkersModule,
     HttpClientModule,
+    LoginModule
   ],
-  providers: [],
+  providers: [
+    CookieService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

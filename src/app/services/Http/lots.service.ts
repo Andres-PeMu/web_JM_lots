@@ -9,6 +9,10 @@ export interface createLot {
 	"id_customer"?: number,
 }
 
+export interface deleteIdLot {
+  id: string;
+}
+
 export interface getLots {
   "ID_LOTES": number,
   "NUMERO_LOTE": number,
@@ -33,7 +37,7 @@ export class LotsService {
   }
 
   getOne(id: number) {
-    return this.http.get<getLots>(`${this.apiUrl}/lots/${id}`);
+    return this.http.get<getLots[]>(`${this.apiUrl}/lots/${id}`);
   }
 
   getOneSector(id: number) {
@@ -45,16 +49,16 @@ export class LotsService {
   }
 
   create(dto: createLot) {
-    return this.http.post<createLot>(`${this.apiUrl}/lots`, dto);
+    return this.http.post<getLots>(`${this.apiUrl}/lots`, dto);
   }
 
   update(id: string, dto: createLot) {
-    return this.http.patch<createLot>(`${this.apiUrl}/lots/${id}`, dto);
+    return this.http.patch<getLots>(`${this.apiUrl}/lots/${id}`, dto);
 
   }
 
   delete(id: string) {
-    return this.http.delete<string>(`${this.apiUrl}/lots/${id}`);
+    return this.http.delete<deleteIdLot>(`${this.apiUrl}/lots/${id}`);
   }
 
 }

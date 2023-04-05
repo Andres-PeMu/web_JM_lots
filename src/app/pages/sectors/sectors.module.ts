@@ -6,17 +6,16 @@ import { SectorsComponent } from './sectors.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ShellOverviewComponent } from './components/shell-overview-sector/shell-overview.component';
+import { ShellOverviewComponent } from './components/shell-overview/shell-overview-sector/shell-overview.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NavModule } from './components/nav/nav.module';
 import { NewSectorModule } from './components/new-sector/new-sector.module';
-import { ShellOverviewOEComponent } from './components/shell-overview-oe/shell-overview-oe.component';
-
-
-
+import { ShellOverviewOEComponent } from './components/shell-overview/shell-overview-oe/shell-overview-oe.component';
+import { ShellOverviewLotsComponent } from './components/shell-overview/shell-overview-lots/shell-overview-lots.component';
+import { CustomersComponent } from './components/customers/customers.component';
 
 @NgModule({
-  declarations: [SectorsComponent, ShellOverviewComponent, ShellOverviewOEComponent ],
+  declarations: [SectorsComponent, ShellOverviewComponent, ShellOverviewOEComponent, ShellOverviewLotsComponent, CustomersComponent ],
   imports: [
     CommonModule,
     SectorsRoutingModule,

@@ -1,27 +1,5 @@
-.example-card {
-  width: 300px;
-  margin: 4px auto;
-}
-
-.card_comp_charge {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.card_actions_button {
-  margin: 4px;
-}
-
-.card_header_button {
-  height: 54px;
-}
-
-.card_div_header_container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  flex-direction: row;
+.example-card{
+  margin: 8px;
 }
 
 .example-form {
@@ -33,4 +11,26 @@
 .example-full-width {
   width: 100%;
   margin-top: 24px;
+}
+
+.oe-card-content-div-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+button{
+  margin: 4px;
+}
+
+mat-card-title{
+  display: flex;
+}
+
+.title_mat_card_actions{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
 }

@@ -7,13 +7,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { LotsComponent } from '../lots/lots.component';
 import { OperationalExpensesComponent } from '../operational-expenses/operational-expenses.component';
 import { WorkersComponent } from '../workers/workers.component';
-import { PaymentsComponent } from '../payments/payments.component';
 import { CardSectorModule } from "../cards/card-sector.module";
 
 
 
 @NgModule({
-    declarations: [NavComponent, LotsComponent, OperationalExpensesComponent, WorkersComponent, PaymentsComponent],
+    declarations: [NavComponent, LotsComponent, OperationalExpensesComponent, WorkersComponent],
     exports: [NavComponent],
     imports: [
         CommonModule,

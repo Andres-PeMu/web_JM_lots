@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-workers',
@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./workers.component.scss']
 })
 export class WorkersComponent {
+
+  @Output() readOE = new EventEmitter()
+
+  reload(){
+    this.readOE.emit();
+  }
 
 }

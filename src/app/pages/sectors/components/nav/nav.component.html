@@ -3,10 +3,9 @@
     <button (click)="handleLots()" mat-raised-button color="primary" >LOTES</button>
     <button (click)="handleOExpenses()" mat-raised-button color="primary" >GASTOS OPERACIONALES</button>
     <button (click)="handleWorkers()" mat-raised-button color="primary" >TRABAJADORES</button>
-    <button (click)="handlePayments()" mat-raised-button color="primary" >PAGOS</button>
+    <button (click)="handleCustomers()" mat-raised-button color="primary" >CLIENTES</button>
   </div>
 </section>
 <app-lots *ngIf="lost" (readLots)="handleLots()" ></app-lots>
 <app-operational-expenses *ngIf="oExpenses" (readOE)="handleOExpenses()" ></app-operational-expenses>
-<app-workers *ngIf="workers" ></app-workers>
-<app-payments *ngIf="payments" ></app-payments>
+<app-workers *ngIf="workers" (readOE)="handleWorkers()" ></app-workers>

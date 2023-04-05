@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SectorsService, getSectors } from 'src/app/services/Http/sectors.service';
 import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
-import { ShellOverviewComponent } from '../../shell-overview-sector/shell-overview.component';
+import { ShellOverviewComponent } from '../../shell-overview/shell-overview-sector/shell-overview.component';
 import { Router } from '@angular/router';
 
 

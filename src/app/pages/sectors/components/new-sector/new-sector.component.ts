@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SectorsService } from 'src/app/services/Http/sectors.service';
@@ -5,7 +6,18 @@ import { SectorsService } from 'src/app/services/Http/sectors.service';
 @Component({
   selector: 'app-new-sector',
   templateUrl: './new-sector.component.html',
-  styleUrls: ['./new-sector.component.scss']
+  styleUrls: ['./new-sector.component.scss'],
+  animations: [
+    trigger('fade', [
+      transition('void => *', [
+        style({ opacity: 0 }),
+        animate(500, style({ opacity: 1 }))
+      ]),
+      transition('* => void', [
+        animate(500, style({ opacity: 0 }))
+      ])
+    ]),
+  ]
 })
 export class NewSectorComponent {
 

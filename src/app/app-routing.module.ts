@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuardGuard } from './guards/auth-guard.guard';
 
 const routes: Routes = [
   {
@@ -8,36 +9,23 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule)
+  },
+  {
     path: 'sectors',
-    loadChildren: () => import('./pages/sectors/sectors.module').then(m => m.SectorsModule)
+    loadChildren: () => import('./pages/sectors/sectors.module').then(m => m.SectorsModule),
+    canActivate: [AuthGuardGuard]
   },
   {
     path: 'charges',
-    loadChildren: () => import('./pages/charges/charges.module').then(m => m.ChargesModule)
-  },
-  {
-    path: 'customer',
-    loadChildren: () => import('./pages/customer/customers.module').then(m => m.CustomersModule)
-  },
-  {
-    path: 'lots',
-    loadChildren: () => import('./pages/lots/lost.module').then(m => m.LostModule)
-  },
-  {
-    path: 'oe',
-    loadChildren: () => import('./pages/ope-expenses/ope-expenses.module').then(m => m.OpeExpensesModule)
+    loadChildren: () => import('./pages/charges/charges.module').then(m => m.ChargesModule),
+    canActivate: [AuthGuardGuard]
   },
   {
     path: 'payments',
-    loadChildren: () => import('./pages/payments/payments.module').then(m => m.PaymentsModule)
-  },
-  {
-    path: 'sales',
-    loadChildren: () => import('./pages/sales/sales.module').then(m => m.SalesModule)
-  },
-  {
-    path: 'workers',
-    loadChildren: () => import('./pages/workers/workers.module').then(m => m.WorkersModule)
+    loadChildren: () => import('./pages/payments/payments.module').then(m => m.PaymentsModule),
+    canActivate: [AuthGuardGuard]
   },
   {
     path: '**',

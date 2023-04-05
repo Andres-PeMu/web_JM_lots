@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ShellOverviewComponent } from './components/shell-overview/shell-overview.component';
 import { LoadPageDirective } from 'src/app/directives/load-page.directive';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { LoadPageDirective } from 'src/app/directives/load-page.directive';
         MatFormFieldModule,
         MatIconModule,
         MatButtonModule,
+        FormsModule,
     ],
     exports: [ChargesComponent],
 })

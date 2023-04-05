@@ -16,12 +16,15 @@ import { CardLotsComponent } from './card-lots/card-lots.component';
 import { CardSectorComponent } from './card-sector/card-sector.component';
 import { CardOexpensesComponent } from './card-oexpenses/card-oexpenses.component';
 import { MatTableModule } from '@angular/material/table';
-import { TableOexpensesComponent } from '../table-oexpenses/table-oexpenses.component';
+import { TableOexpensesComponent } from '../tables/table-oexpenses/table-oexpenses.component';
+import { CardWorkerComponent } from './card-worker/card-worker.component';
+import { StringModalComponent } from 'src/app/components/string-modal/string-modal.component';
+import { TableLotsComponent } from '../tables/table-lots/table-lots.component';
 
 
 @NgModule({
-  declarations: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent],
-  exports: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent],
+  declarations: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, StringModalComponent, TableLotsComponent],
+  exports: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, TableLotsComponent],
   imports: [
     CommonModule,
     MatCardModule,
