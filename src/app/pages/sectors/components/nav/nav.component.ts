@@ -49,7 +49,10 @@ export class NavComponent implements OnInit {
   }
 
   handleCustomers(){
-
+    this.lost = false;
+    this.oExpenses = false;
+    this.workers = false;
+    this.customers = !this.customers;
   }
 
 }

@@ -123,14 +123,13 @@ export class TableLotsComponent {
     });
   }
 
-  handleDelete(idPago: number, idGop: number){
-    // console.log(idPago)
-    // console.log(idGop)
-    // this._serviceOpw.delete(idGop.toString()).subscribe(res => {
-    //   console.log(res);
-    //   this._service.delete(idPago.toString()).subscribe(res => console.log(res));
-    // });
-    // this.readOE.emit();
+  handleDelete(idPago: number){
+    const dataCharges = this.resultGetSalesChargesCostomer.filter(data =>  idPago === data.ID_COBROS)
+    this._serviceCharges.delete(idPago.toString()).subscribe(res => {
+      console.log(res);
+      this._serviceSalesChargesCustomer.delete(dataCharges[0].ID_VENCOCLI.toString()).subscribe(res => console.log(res));
+    });
+    this.readOE.emit();
   }
 
   handleNewPayment(){

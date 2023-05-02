@@ -8,11 +8,12 @@ import { LotsComponent } from '../lots/lots.component';
 import { OperationalExpensesComponent } from '../operational-expenses/operational-expenses.component';
 import { WorkersComponent } from '../workers/workers.component';
 import { CardSectorModule } from "../cards/card-sector.module";
+import { CustomersComponent } from '../customers/customers.component';
 
 
 
 @NgModule({
-    declarations: [NavComponent, LotsComponent, OperationalExpensesComponent, WorkersComponent],
+    declarations: [NavComponent, LotsComponent, OperationalExpensesComponent, WorkersComponent, CustomersComponent],
     exports: [NavComponent],
     imports: [
         CommonModule,

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-customers',
@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./customers.component.scss']
 })
 export class CustomersComponent {
+  @Output() readOE = new EventEmitter()
 
+  reload() {
+    this.readOE.emit();
+  }
 }

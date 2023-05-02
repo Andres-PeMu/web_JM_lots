@@ -15,7 +15,7 @@ import { ShellOverviewLotsComponent } from './components/shell-overview/shell-ov
 import { CustomersComponent } from './components/customers/customers.component';
 
 @NgModule({
-  declarations: [SectorsComponent, ShellOverviewComponent, ShellOverviewOEComponent, ShellOverviewLotsComponent, CustomersComponent ],
+  declarations: [SectorsComponent, ShellOverviewComponent, ShellOverviewOEComponent, ShellOverviewLotsComponent ],
   imports: [
     CommonModule,
     SectorsRoutingModule,

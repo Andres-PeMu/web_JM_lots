@@ -20,11 +20,12 @@ import { TableOexpensesComponent } from '../tables/table-oexpenses/table-oexpens
 import { CardWorkerComponent } from './card-worker/card-worker.component';
 import { StringModalComponent } from 'src/app/components/string-modal/string-modal.component';
 import { TableLotsComponent } from '../tables/table-lots/table-lots.component';
+import { CardCustomerComponent } from './card-customer/card-customer.component';
 
 
 @NgModule({
-  declarations: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, StringModalComponent, TableLotsComponent],
-  exports: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, TableLotsComponent],
+  declarations: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, StringModalComponent, TableLotsComponent, CardCustomerComponent],
+  exports: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, TableLotsComponent, CardCustomerComponent],
   imports: [
     CommonModule,
     MatCardModule,

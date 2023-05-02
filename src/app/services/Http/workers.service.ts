@@ -7,6 +7,7 @@ export interface createWorker {
 	"lastName": string,
 	"email": string,
 	"id_sectors"?: number,
+  "phone"?: number,
 }
 
 export interface getWorkers {
@@ -16,6 +17,7 @@ export interface getWorkers {
   "APELLIDO": string,
   "CORREO": string,
   "ID_SECTOR"?: number
+  "TELEFONO"?: number
 }
 
 @Injectable({

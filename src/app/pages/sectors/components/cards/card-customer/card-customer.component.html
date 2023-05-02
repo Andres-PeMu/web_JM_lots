@@ -5,17 +5,17 @@
   <div>
     <mat-card class="example-card" [@fade] [@detailExpand]="isExpanded ? 'expanded' : 'collapsed'" *ngIf="isExpanded">
       <mat-card-header>
-        <mat-card-subtitle>Nuevo trabajador</mat-card-subtitle>
-        <mat-card-title>Ingrese un nuevo trabajador</mat-card-title>
+        <mat-card-subtitle>Nuevo Cliente</mat-card-subtitle>
+        <mat-card-title>Ingrese un nuevo Cliente</mat-card-title>
       </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
-        <section [formGroup]="formEditWorker" class="example-full-width example-form" appearance="fill">
+        <section [formGroup]="formEditCustomer" class="example-full-width example-form" appearance="fill">
           <mat-form-field>
             <mat-label>Identificacion</mat-label>
             <input matInput formControlName="identification" required>
             <mat-error
-              *ngIf="formEditWorker.get('identification')?.invalid && (formEditWorker.get('identification')?.dirty || formEditWorker.get('identification')?.touched)">
+              *ngIf="formEditCustomer.get('identification')?.invalid && (formEditCustomer.get('identification')?.dirty || formEditCustomer.get('identification')?.touched)">
               la identificacion es requerido
             </mat-error>
           </mat-form-field>
@@ -23,7 +23,7 @@
             <mat-label>Nombre</mat-label>
             <input matInput formControlName="name" required>
             <mat-error
-              *ngIf="formEditWorker.get('name')?.invalid && (formEditWorker.get('name')?.dirty || formEditWorker.get('name')?.touched)">
+              *ngIf="formEditCustomer.get('name')?.invalid && (formEditCustomer.get('name')?.dirty || formEditCustomer.get('name')?.touched)">
               El Nombre es requerido
             </mat-error>
           </mat-form-field>
@@ -31,7 +31,7 @@
             <mat-label>Apellido</mat-label>
             <input matInput formControlName="lastName" required>
             <mat-error
-              *ngIf="formEditWorker.get('lastName')?.invalid && (formEditWorker.get('lastName')?.dirty || formEditWorker.get('lastName')?.touched)">
+              *ngIf="formEditCustomer.get('lastName')?.invalid && (formEditCustomer.get('lastName')?.dirty || formEditCustomer.get('lastName')?.touched)">
               El Apellido es requeridas
             </mat-error>
           </mat-form-field>
@@ -39,7 +39,7 @@
             <mat-label>Correo</mat-label>
             <input matInput formControlName="email" required>
             <mat-error
-              *ngIf="formEditWorker.get('email')?.invalid && (formEditWorker.get('email')?.dirty || formEditWorker.get('email')?.touched)">
+              *ngIf="formEditCustomer.get('email')?.invalid && (formEditCustomer.get('email')?.dirty || formEditCustomer.get('email')?.touched)">
               El correo es requeridas
             </mat-error>
           </mat-form-field>
@@ -47,7 +47,7 @@
             <mat-label>Telefono</mat-label>
             <input matInput formControlName="phone" required>
             <mat-error
-              *ngIf="formEditWorker.get('phone')?.invalid && (formEditWorker.get('phone')?.dirty || formEditWorker.get('phone')?.touched)">
+              *ngIf="formEditCustomer.get('phone')?.invalid && (formEditCustomer.get('phone')?.dirty || formEditCustomer.get('phone')?.touched)">
               El Telefono es requeridas
             </mat-error>
           </mat-form-field>
@@ -56,39 +56,39 @@
       </mat-card-content>
       <mat-card-actions>
         <button class="card_actions_button" color="primary" mat-raised-button mat-button
-          (click)="handleSaveNew()" [disabled]="formEditWorker.invalid" >Guardar</button>
+          (click)="handleSaveNew()" [disabled]="formEditCustomer.invalid" >Guardar</button>
         <button class="card_actions_button" color="warn" mat-raised-button mat-button
           (click)="handleNewPayment()">Cancelar</button>
       </mat-card-actions>
     </mat-card>
   </div>
   <button *ngIf="!isExpanded" class="card_actions_button" color="primary" mat-raised-button mat-button
-    (click)="handleNewPayment()">Nuevo trabajador</button>
+    (click)="handleNewPayment()">Nuevo Cliente</button>
 
   <mat-divider></mat-divider>
 
-  <mat-card *ngFor="let worker of workers" class="example-card">
+  <mat-card *ngFor="let customer of customers" class="example-card">
     <mat-card-header>
-      <mat-card-subtitle>trabajador</mat-card-subtitle>
+      <mat-card-subtitle>Clientes</mat-card-subtitle>
       <mat-card-title>
-        <mat-card-title> {{ worker.NOMBRE }} {{ worker.APELLIDO }}</mat-card-title>
+        <mat-card-title> {{ customer.NOMBRE }} {{ customer.APELLIDO }}</mat-card-title>
       </mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
     <mat-card-content>
       <div class="oe-card-content-div-section">
         <section>
-          <p>IDENTIFICACION: {{ worker.IDENTIFICACION }}</p>
-          <p>CORREO: {{ worker.CORREO }}</p>
+          <p>IDENTIFICACION: {{ customer.IDENTIFICACION }}</p>
+          <p>CORREO: {{ customer.CORREO }}</p>
         </section>
       </div>
-      <section [formGroup]="formEditWorker" class="example-full-width example-form" appearance="fill"
-        *ngIf="activateIdEdit == worker.ID_TRABAJADORES">
+      <section [formGroup]="formEditCustomer" class="example-full-width example-form" appearance="fill"
+        *ngIf="activateIdEdit == customer.ID_CLIENTES">
         <mat-form-field>
           <mat-label>Identificacion</mat-label>
           <input matInput formControlName="identification" required>
           <mat-error
-            *ngIf="formEditWorker.get('identification')?.invalid && (formEditWorker.get('identification')?.dirty || formEditWorker.get('identification')?.touched)">
+            *ngIf="formEditCustomer.get('identification')?.invalid && (formEditCustomer.get('identification')?.dirty || formEditCustomer.get('identification')?.touched)">
             La Identificacion es requerido
           </mat-error>
         </mat-form-field>
@@ -96,7 +96,7 @@
           <mat-label>Nombre</mat-label>
           <input matInput formControlName="name" required>
           <mat-error
-            *ngIf="formEditWorker.get('name')?.invalid && (formEditWorker.get('name')?.dirty || formEditWorker.get('name')?.touched)">
+            *ngIf="formEditCustomer.get('name')?.invalid && (formEditCustomer.get('name')?.dirty || formEditCustomer.get('name')?.touched)">
             El Nombre es requerido
           </mat-error>
         </mat-form-field>
@@ -104,7 +104,7 @@
           <mat-label>Apellido</mat-label>
           <input matInput formControlName="lastName" required>
           <mat-error
-            *ngIf="formEditWorker.get('lastName')?.invalid && (formEditWorker.get('lastName')?.dirty || formEditWorker.get('lastName')?.touched)">
+            *ngIf="formEditCustomer.get('lastName')?.invalid && (formEditCustomer.get('lastName')?.dirty || formEditCustomer.get('lastName')?.touched)">
             El Apellido es requeridas
           </mat-error>
         </mat-form-field>
@@ -112,7 +112,7 @@
           <mat-label>Correo</mat-label>
           <input matInput formControlName="email" required>
           <mat-error
-            *ngIf="formEditWorker.get('email')?.invalid && (formEditWorker.get('email')?.dirty || formEditWorker.get('email')?.touched)">
+            *ngIf="formEditCustomer.get('email')?.invalid && (formEditCustomer.get('email')?.dirty || formEditCustomer.get('email')?.touched)">
             El correo es requeridas
           </mat-error>
         </mat-form-field>
@@ -120,7 +120,7 @@
           <mat-label>Telefono</mat-label>
           <input matInput formControlName="phone" required>
           <mat-error
-            *ngIf="formEditWorker.get('phone')?.invalid && (formEditWorker.get('phone')?.dirty || formEditWorker.get('phone')?.touched)">
+            *ngIf="formEditCustomer.get('phone')?.invalid && (formEditCustomer.get('phone')?.dirty || formEditCustomer.get('phone')?.touched)">
             El Telefono es requeridas
           </mat-error>
         </mat-form-field>
@@ -129,14 +129,14 @@
     </mat-card-content>
     <mat-card-actions>
       <button class="card_actions_button" color="primary" mat-raised-button mat-button
-        (click)="handleEdit(worker)" *ngIf="activateIdEdit == undefined">Editar</button>
+        (click)="handleEdit(customer)" *ngIf="activateIdEdit == undefined">Editar</button>
       <button class="card_actions_button" color="warn" mat-raised-button mat-button
-        (click)="handleDelete(worker.ID_TRABAJADORES)" *ngIf="activateIdEdit == undefined">Eliminar</button>
+        (click)="handleDelete(customer.ID_CLIENTES)" *ngIf="activateIdEdit == undefined">Eliminar</button>
       <button class="card_actions_button" color="accent" mat-raised-button mat-button
-        (click)="handleEditSutmit( worker.ID_TRABAJADORES )" *ngIf="activateIdEdit == worker.ID_TRABAJADORES"
-        [disabled]="formEditWorker.invalid">Enviar</button>
+        (click)="handleEditSutmit( customer.ID_CLIENTES )" *ngIf="activateIdEdit == customer.ID_CLIENTES"
+        [disabled]="formEditCustomer.invalid">Enviar</button>
       <button class=" card_actions_button" color="warn" mat-raised-button mat-button
-        *ngIf="activateIdEdit == worker.ID_TRABAJADORES" (click)="handleCancel()">Cancelar</button>
+        *ngIf="activateIdEdit == customer.ID_CLIENTES" (click)="handleCancel()">Cancelar</button>
     </mat-card-actions>
     <mat-card-footer>
       <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->

@@ -1,15 +1,14 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { catchError, of } from 'rxjs';
-import { WorkersService, getWorkers } from 'src/app/services/Http/workers.service';
-import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
+import { CustomersService, getCustomers } from 'src/app/services/Http/customers.service';
 
 @Component({
-  selector: 'app-card-worker',
-  templateUrl: './card-worker.component.html',
-  styleUrls: ['./card-worker.component.scss'],
+  selector: 'app-card-customer',
+  templateUrl: './card-customer.component.html',
+  styleUrls: ['./card-customer.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0'})),
@@ -27,11 +26,10 @@ import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
     ]),
   ]
 })
-export class CardWorkerComponent implements OnInit {
-
+export class CardCustomerComponent {
   @Output() readOECard = new EventEmitter()
 
-  formEditWorker!: FormGroup;
+  formEditCustomer!: FormGroup;
 
   valueInputEdit: string = '';
   activateInputEdit: boolean = false;
@@ -42,14 +40,13 @@ export class CardWorkerComponent implements OnInit {
 
   isExpanded = false;
 
-  workers: getWorkers[] = [];
+  customers: getCustomers[] = [];
 
   constructor(
-    private _serviceWorker: WorkersService,
-    private dataService: DataSectorsService,
+    private _serviceCustomer: CustomersService,
     private fb: FormBuilder,
   ){
-    this.formEditWorker = this.fb.group({
+    this.formEditCustomer = this.fb.group({
       identification: ['', Validators.required],
       name: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -59,10 +56,8 @@ export class CardWorkerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = Number(this.dataService.id)
-    this._serviceWorker.getOneSector(id).subscribe(res =>{
-      console.log(res);
-      this.workers = res;
+    this._serviceCustomer.getAll().subscribe( (dataCustomers: getCustomers[]) => {
+      this.customers = dataCustomers;
     })
   }
 
@@ -71,42 +66,30 @@ export class CardWorkerComponent implements OnInit {
     this.valueInputEdit = query;
   }
 
-  handleEdit(worker: getWorkers) {
-    this.activateIdEdit = worker.ID_TRABAJADORES;
-    this.formEditWorker.controls['identification'].setValue(worker.IDENTIFICACION);
-    this.formEditWorker.controls['name'].setValue(worker.NOMBRE);
-    this.formEditWorker.controls['lastName'].setValue(worker.APELLIDO);
-    this.formEditWorker.controls['email'].setValue(worker.CORREO);
-    this.formEditWorker.controls['phone'].setValue(worker.TELEFONO);
+  handleEdit(customers: getCustomers) {
+    this.activateIdEdit = customers.ID_CLIENTES;
+    this.formEditCustomer.controls['identification'].setValue(customers.IDENTIFICACION);
+    this.formEditCustomer.controls['name'].setValue(customers.NOMBRE);
+    this.formEditCustomer.controls['lastName'].setValue(customers.APELLIDO);
+    this.formEditCustomer.controls['email'].setValue(customers.CORREO);
+    this.formEditCustomer.controls['phone'].setValue(customers.TELEFONO);
   }
 
   handleSaveNew() {
-    let data = this.formEditWorker.value;
-    const id_sectors = Number(this.dataService.id)
-    data = {
-      ...data,
-      id_sectors,
-    }
+    let data = this.formEditCustomer.value;
     data = this.convertToUppercase(data);
-    this._serviceWorker.create(data)
+    this._serviceCustomer.create(data)
     .subscribe( res =>{
-      console.log(res);
       this.readOECard.emit();
     }
     );
   }
 
-  handleEditSutmit( idWorker: number ) {
-    let data = this.formEditWorker.value;
-    const id_sectors = Number(this.dataService.id)
-    data = {
-      ...data,
-      id_sectors,
-    }
+  handleEditSutmit( idCustomer: number ) {
+    let data = this.formEditCustomer.value;
     data = this.convertToUppercase(data);
-    this._serviceWorker.update(idWorker.toString(), data)
+    this._serviceCustomer.update(idCustomer.toString(), data)
     .subscribe(res =>{
-      console.log(res);
       this.readOECard.emit();
     });
   }
@@ -116,10 +99,10 @@ export class CardWorkerComponent implements OnInit {
   }
 
   handleDelete(id: number) {
-    this._serviceWorker.delete(id.toString())
+    this._serviceCustomer.delete(id.toString())
     .pipe(
       catchError( (error: HttpErrorResponse) =>{
-        this.modalString = 'el trabajador tiene gastos operacionales, para eliminar borrar los pagos realizados';
+        this.modalString = 'el trabajador tiene uno o mas lotes, para eliminar borrar los lotes';
         this.seeModal = !this.seeModal;
         return of(null);
       })
