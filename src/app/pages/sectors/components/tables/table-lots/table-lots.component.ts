@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SalesService, getSales } from 'src/app/services/Http/sales.service';
 import { LotsService, getLots } from 'src/app/services/Http/lots.service';
@@ -12,6 +12,8 @@ export interface PeriodicElement {
   date: string;
   idChange?: number;
   idLot?: number;
+  idVencocli?: number;
+  idCustomer?: number;
 }
 
 @Component({
@@ -67,7 +69,8 @@ export class TableLotsComponent {
     private _serviceSales: SalesService,
     private _servicelots: LotsService,
     private _serviceCharges: ChargesService,
-    private _serviceSalesChargesCustomer: SalesChargesCustomersService
+    private _serviceSalesChargesCustomer: SalesChargesCustomersService,
+    private cd: ChangeDetectorRef,
   ) {
     this.editSalesChargesCustomerValue = new FormGroup({
       'collectionValue': new FormControl('', Validators.required),
@@ -82,14 +85,11 @@ export class TableLotsComponent {
     if(idlot != 0){
       this._serviceSales.getOnelot(idlot).subscribe(res => {
         this.dataSale = res;
-        console.log(this.dataSale);
       });
       this._servicelots.getOne(idlot).subscribe(res => {
         this.dataLot = res;
-        console.log(this.dataLot);
         this._serviceSalesChargesCustomer.getOneLots(this.dataLot[0].ID_LOTES).subscribe((res: getSalesChargesCostomersSchema[]) => {
           this.resultGetSalesChargesCostomer = res;
-          console.log(this.resultGetSalesChargesCostomer)
           this.resultGetSalesChargesCostomer.forEach((res: getSalesChargesCostomersSchema, index: number) => {
             this.ELEMENT_DATA!.push(
               {
@@ -98,6 +98,8 @@ export class TableLotsComponent {
                 date: res.FECHA_PAGO!,
                 idChange: res.ID_COBROS,
                 idLot: res.ID_LOTES,
+                idVencocli: res.ID_VENCOCLI,
+                idCustomer: res.ID_CLIENTES,
               })
           });
           this.dataSource = this.ELEMENT_DATA;
@@ -126,8 +128,7 @@ export class TableLotsComponent {
   handleDelete(idPago: number){
     const dataCharges = this.resultGetSalesChargesCostomer.filter(data =>  idPago === data.ID_COBROS)
     this._serviceCharges.delete(idPago.toString()).subscribe(res => {
-      console.log(res);
-      this._serviceSalesChargesCustomer.delete(dataCharges[0].ID_VENCOCLI.toString()).subscribe(res => console.log(res));
+      this._serviceSalesChargesCustomer.delete(dataCharges[0].ID_VENCOCLI.toString()).subscribe(res => this.cd.detectChanges());
     });
     this.readOE.emit();
   }
@@ -149,7 +150,6 @@ export class TableLotsComponent {
         idCharges: resultServiceCharges.ID_COBROS,
         idCustomers: this.dataSale[0].ID_CLIENTE!
       }).subscribe(resultServiceSales =>{
-        console.log(resultServiceSales)
         this.readOE.emit();
       })
     })

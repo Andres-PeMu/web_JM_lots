@@ -29,12 +29,15 @@
       <td mat-cell *matCellDef="let element">
         <button class="card_actions_button" color="primary" mat-raised-button mat-button (click)="handleEdit(element)"
           *ngIf="!stateEdit.tr">Editar</button>
-        <button class="card_actions_button " color="primary" mat-raised-button mat-button
-          (click)="handleSave(element)" *ngIf="stateEdit.tr && element.n ==stateEdit.n">Guardar</button>
+        <button class="card_actions_button " color="primary" mat-raised-button mat-button (click)="handleSave(element)"
+          *ngIf="stateEdit.tr && element.n ==stateEdit.n">Guardar</button>
         <button class=" card_actions_button " color="warn" mat-raised-button mat-button *ngIf="!stateEdit.tr"
           (click)="handleDelete(element.idChange)">Eliminar</button>
         <button class=" card_actions_button " color="warn" mat-raised-button mat-button
           *ngIf="stateEdit.tr && element.n ==stateEdit.n" (click)="handleEdit(element)">Cancelar</button>
+
+        <app-invoice [idCustomer]="element.idCustomer" [idvencocli]="element.idVencocli" [concep]=" 'por pago de lote' " />
+
       </td>
     </ng-container>
 
@@ -50,8 +53,8 @@
     <mat-form-field [@detailExpand]="isExpanded ? 'expanded' : 'collapsed'">
       <mat-label>Nuevo pago</mat-label>
       <input matInput type="text" formControlName="collectionValue" required>
-      <button [disabled]="!newSalesChargesCustomerValue.valid" class="card_actions_button" color="primary" mat-raised-button
-        mat-button (click)="handleSavePayment()">Guardar</button>
+      <button [disabled]="!newSalesChargesCustomerValue.valid" class="card_actions_button" color="primary"
+        mat-raised-button mat-button (click)="handleSavePayment()">Guardar</button>
     </mat-form-field>
   </form>
 </div>

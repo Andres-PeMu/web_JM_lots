@@ -21,11 +21,13 @@ import { CardWorkerComponent } from './card-worker/card-worker.component';
 import { StringModalComponent } from 'src/app/components/string-modal/string-modal.component';
 import { TableLotsComponent } from '../tables/table-lots/table-lots.component';
 import { CardCustomerComponent } from './card-customer/card-customer.component';
+import { InvoiceComponent } from '../tables/invoice/invoice.component';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 
 @NgModule({
-  declarations: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, StringModalComponent, TableLotsComponent, CardCustomerComponent],
-  exports: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, TableLotsComponent, CardCustomerComponent],
+  declarations: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, StringModalComponent, TableLotsComponent, CardCustomerComponent, InvoiceComponent],
+  exports: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, TableLotsComponent, CardCustomerComponent, InvoiceComponent],
   imports: [
     CommonModule,
     MatCardModule,
@@ -38,7 +40,8 @@ import { CardCustomerComponent } from './card-customer/card-customer.component';
     MatInputModule,
     MatBottomSheetModule,
     ReactiveFormsModule,
-    MatTableModule
+    MatTableModule,
+    MatGridListModule
   ]
 })
 export class CardSectorModule { }

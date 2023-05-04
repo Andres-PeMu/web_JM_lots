@@ -22,7 +22,7 @@
       <div class="oe-card-content-div-section">
         <section>
           <p>numero de lote: {{ lot.NUMERO_LOTE }}</p>
-          <p>valor del lote: {{ lot.VALOR_LOTE }}</p>
+          <p>valor del lote: ${{ lot.VALOR_LOTE | number }}</p>
         </section>
         <section>
           <app-table-lots *ngIf="lot.ID_CLIENTE" [idlot]="lot.ID_LOTES" (readOE)="handleRead()"></app-table-lots>
@@ -66,6 +66,7 @@
         *ngIf="activateIdEdit == lot.NUMERO_LOTE && lot.ID_CLIENTE" [disabled]="formEditSector.invalid">Guardar</button>
       <button class=" card_actions_button" color="warn" mat-raised-button mat-button
         *ngIf="activateIdEdit == lot.NUMERO_LOTE" (click)="handleCancel()">Cancelar</button>
+      <app-invoice></app-invoice>
     </mat-card-actions>
     <mat-card-footer>
       <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
