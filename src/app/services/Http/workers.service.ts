@@ -6,8 +6,8 @@ export interface createWorker {
 	"name": string,
 	"lastName": string,
 	"email": string,
-	"id_sectors"?: number,
-  "phone"?: number,
+	"id_sectors": number,
+  "phone": number,
 }
 
 export interface getWorkers {

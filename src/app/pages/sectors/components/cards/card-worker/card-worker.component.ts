@@ -87,6 +87,7 @@ export class CardWorkerComponent implements OnInit {
       ...data,
       id_sectors,
     }
+    console.log(data)
     data = this.convertToUppercase(data);
     this._serviceWorker.create(data)
     .subscribe( res =>{

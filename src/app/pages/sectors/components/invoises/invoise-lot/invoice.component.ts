@@ -1,9 +1,11 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { InvoiceService, getInvoice } from 'src/app/services/Http/invoice.service';
-import { getSalesChargesCostomersSchema } from 'src/app/services/Http/sales-charges-customers.service';
 import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
+import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
+import { DataLotsService } from 'src/app/services/date/data-lots.service';
+import { SalesChargesCustomersService, getSalesChargesCostomersSchema } from 'src/app/services/Http/sales-charges-customers.service';
 
 interface InputDateInvice {
   urbanization: string;
@@ -27,29 +29,46 @@ interface InputDateInvice {
 export class InvoiceComponent implements OnInit {
 
   @ViewChild('content', { static: false }) content: ElementRef | undefined;
-  @Input() idCustomer: number = 0;
-  @Input() idvencocli: number = 0;
-  @Input() concep: string = '';
 
-  customerName: string = '';
-  generatePdf: boolean = false;
+  allBills: boolean = false;
   inputDateInvice: InputDateInvice | undefined;
+  dataSales: getSalesChargesCostomersSchema[] | undefined;
+  totalSales: number = 0;
+  totalInvoicesForCollection: getInvoice[] = [];
 
   constructor(
     private _serviceInvoise: InvoiceService,
-    private DataSector: DataSectorsService
+    private dataSector: DataSectorsService,
+    private dataInvoise: DataInvoiseService,
+    public datalot: DataLotsService,
+    private _salesChargesCustomersService: SalesChargesCustomersService
   ) { }
 
   ngOnInit(): void {
+    this.allBills = this.dataInvoise.fullOrPartialInvoice;
+    const idlot = parseInt(this.datalot.id);
+    this._salesChargesCustomersService.getOneLots(idlot).subscribe(dataLots => {
+      dataLots.forEach(data => {
+        this.totalSales += data.VALOR_COBRO;
+      });
+      dataLots.forEach(data => {
+        this._serviceInvoise.getOneVencocli(data.ID_VENCOCLI)
+          .subscribe(invoise => this.totalInvoicesForCollection?.push(...invoise))
+      });
+      console.log('totalInvoicesForCollection', this.totalInvoicesForCollection)
+      this.dataSales = dataLots;
+      console.log(this.dataSales)
+      console.log('this.totalSales', this.totalSales)
+    })
     this._serviceInvoise.create({
-      sectorId: parseInt(this.DataSector.id),
-      customerId: this.idCustomer,
-      concept: this.concep,
-      idVencocli: this.idvencocli,
-    }).subscribe(res => {
+      sectorId: parseInt(this.dataSector.id),
+      customerId: this.dataInvoise.periodicElement.idCustomer!,
+      concept: this.dataInvoise.concepto,
+      idVencocli: this.dataInvoise.periodicElement.idVencocli!,
+    }).subscribe((res) => {
       console.log('res: entre', res)
     });
-    this._serviceInvoise.getOneVencocli(this.idvencocli)
+    this._serviceInvoise.getOneVencocli(this.dataInvoise.periodicElement.idVencocli!)
       .subscribe((dataInvoise: getInvoice[]): void => {
         console.log('dataInvoise', dataInvoise)
         this.inputDateInvice = {
@@ -59,23 +78,20 @@ export class InvoiceComponent implements OnInit {
           identification: dataInvoise[0].IDENTIFICACION,
           client: `${dataInvoise[0].NOMBRE} ${dataInvoise[0].APELLIDO}`,
           phone: dataInvoise[0].TELEFONO,
-          concept: this.concep,
+          concept: this.dataInvoise.concepto,
           lotNumber: dataInvoise[0].NUMERO_LOTE,
           value: dataInvoise[0].VALOR_COBRO,
           numberReceipt: dataInvoise[0].NUMERO_FACTURA,
         };
       });
-      console.log('this.idvencocli', this.idvencocli)
   }
 
   generatePDF() {
-    this.generatePdf = true;
     const doc = new jsPDF.jsPDF();
     const content = this.content?.nativeElement;
     html2canvas(content).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
-      const imgWidth = 105; // La mitad del ancho de página A4 en mm
-      const pageHeight = 297; // Alto de página A4 en mm
+      const imgWidth = 205;
       const imgHeight = canvas.height * imgWidth / canvas.width;
       let position = 0;
 
@@ -83,7 +99,6 @@ export class InvoiceComponent implements OnInit {
       position -= (imgHeight + 10);
 
       doc.save('pdf_generado_desde_angular.pdf');
-      this.generatePdf = false;
     });
   }
 }

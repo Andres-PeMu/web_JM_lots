@@ -66,7 +66,9 @@
         *ngIf="activateIdEdit == lot.NUMERO_LOTE && lot.ID_CLIENTE" [disabled]="formEditSector.invalid">Guardar</button>
       <button class=" card_actions_button" color="warn" mat-raised-button mat-button
         *ngIf="activateIdEdit == lot.NUMERO_LOTE" (click)="handleCancel()">Cancelar</button>
-      <app-invoice></app-invoice>
+      <button class="card_actions_button" color="accent" mat-raised-button mat-button
+        (click)="handleInvoise(lot.ID_LOTES, lot.VALOR_LOTE || 0)"
+        *ngIf="activateIdEdit == undefined">Total Factura</button>
     </mat-card-actions>
     <mat-card-footer>
       <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->

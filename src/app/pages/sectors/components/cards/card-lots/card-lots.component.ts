@@ -9,6 +9,9 @@ import { SalesService } from 'src/app/services/Http/sales.service';
 import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
 import { ShellOverviewLotsComponent } from '../../shell-overview/shell-overview-lots/shell-overview-lots.component';
 import { DataLotsService } from 'src/app/services/date/data-lots.service';
+import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
+import { MatDialog } from '@angular/material/dialog';
+import { InvoiceComponent } from '../../invoises/invoise-lot/invoice.component';
 
 export interface formEditSector {
   "lotValue": string,
@@ -44,7 +47,9 @@ export class CardLotsComponent {
     private fb: FormBuilder,
     private router: Router,
     private _bottomSheet: MatBottomSheet,
-    private _dataLots: DataLotsService
+    private _dataLots: DataLotsService,
+    private _dataInvoise: DataInvoiseService,
+    public invioiseModal: MatDialog,
   ) { }
 
   ngOnDestroy() { }
@@ -91,13 +96,11 @@ export class CardLotsComponent {
     }
     console.log(data)
     this._serviceLots.create(data).subscribe(res => {
-      console.log(res);
       this._serviceSales.create({
         salesValue: data.lotValue,
         id_lots: res.ID_LOTES,
         id_customer: data.id_customer,
       }).subscribe(res => {
-        console.log(res);
         this.readLot.emit();
       });
     });
@@ -112,16 +115,14 @@ export class CardLotsComponent {
       lotNumber,
     }
     this._serviceLots.update(idLot.toString(), data).subscribe(res => {
-        this.dataSales = res;
-        console.log(this.dataSales)
-        this._serviceSales.update(this.dataSales.ID_LOTES.toString(), {
-          salesValue: this.dataSales.VALOR_LOTE!,
-          id_lots: this.dataSales.ID_LOTES!,
-          id_customer: data.id_customer,
-        }).subscribe(res => {
-          console.log(res);
-          this.readLot.emit();
-        })
+      this.dataSales = res;
+      this._serviceSales.update(this.dataSales.ID_LOTES.toString(), {
+        salesValue: this.dataSales.VALOR_LOTE!,
+        id_lots: this.dataSales.ID_LOTES!,
+        id_customer: data.id_customer,
+      }).subscribe(res => {
+        this.readLot.emit();
+      })
     });
   }
 
@@ -163,8 +164,18 @@ export class CardLotsComponent {
     return this.results = this.getCustomers;
   }
 
-  handleRead(){
+  handleRead() {
     this.readLot.emit();
+  }
+
+  handleInvoise(idLot: number, lotValue: number) {
+    this._dataLots.id = idLot.toString();
+    this._dataLots.lotValue = lotValue;
+    this._dataInvoise.fullOrPartialInvoice = false;
+    this.invioiseModal.open(InvoiceComponent, {
+      enterAnimationDuration: '1000ms',
+      exitAnimationDuration: '1000ms',
+    });
   }
 
 }

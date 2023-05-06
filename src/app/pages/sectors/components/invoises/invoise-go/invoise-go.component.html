@@ -1,0 +1,93 @@
+<div #content *ngIf="allBills">
+  <div class="content-to-hide">
+    <div class="my-card">
+      <div class="my-card-header">
+        <h2 class="my-card-title">Urbanizacion </h2>
+        <h3 class="my-card-subtitle">Cel: 3128616426 - 3184554776</h3>
+        <h3>city</h3>
+        <div class="my-card-header-fech">
+          <p>Fecha: </p>
+          <p>Recibo N°: </p>
+        </div>
+      </div>
+      <div class="my-card-content">
+        <p>Cliente: </p>
+        <p>Identificacion: </p>
+        <p>Telefono: </p>
+        <p>Por concepto de: </p>
+        <p>Numero de lote: </p>
+        <p>Valor: </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div #content *ngIf="!allBills">
+  <div id="app" class="col-11 all">
+    <h2>Facturas</h2>
+    <div class="row my-3">
+      <div class="col-10">
+        <h2></h2>
+        <p>CONCEPTO: </p>
+      </div>
+      <div class="col-2">
+        <!-- <img src="~/images/Mil-Pasos_Negro.png" /> -->
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="row fact-info mt-3">
+      <div class="col-3">
+        <h5>Facturar a</h5>
+        <p>Cliente: </p>
+        <p>Identificacion: </p>
+        <p>Telefono: </p>
+        <p>Numero de lote: </p>
+      </div>
+    </div>
+
+    <div class="row my-5">
+      <table class="table table-borderless factura">
+        <thead>
+          <tr>
+            <th>N°</th>
+            <th>Fecha Pago</th>
+            <th>N° factura</th>
+            <th>Valor Pagos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td class="td_padding"></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <th></th>
+            <th></th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th>Valor lote</th>
+            <th></th>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th>Saldo</th>
+            <th></th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+<button color="primary" mat-button (click)="generatePDF()">Generar PDF</button>

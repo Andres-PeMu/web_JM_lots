@@ -12,10 +12,10 @@ import { NavModule } from './components/nav/nav.module';
 import { NewSectorModule } from './components/new-sector/new-sector.module';
 import { ShellOverviewOEComponent } from './components/shell-overview/shell-overview-oe/shell-overview-oe.component';
 import { ShellOverviewLotsComponent } from './components/shell-overview/shell-overview-lots/shell-overview-lots.component';
-import { CustomersComponent } from './components/customers/customers.component';
+import { InvoiseGoComponent } from './components/invoises/invoise-go/invoise-go.component';
 
 @NgModule({
-  declarations: [SectorsComponent, ShellOverviewComponent, ShellOverviewOEComponent, ShellOverviewLotsComponent ],
+  declarations: [SectorsComponent, ShellOverviewComponent, ShellOverviewOEComponent, ShellOverviewLotsComponent, InvoiseGoComponent ],
   imports: [
     CommonModule,
     SectorsRoutingModule,

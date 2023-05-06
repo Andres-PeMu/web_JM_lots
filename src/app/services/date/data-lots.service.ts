@@ -5,12 +5,17 @@ import { Injectable } from '@angular/core';
 })
 export class DataLotsService {
 
-  id:string = ''
+  id: string = ''
+  lotValue: number = 0
 
   constructor() { }
 
   sabeId(id: string){
     this.id = id;
+  }
+
+  sabeLotValue(lotValue: number){
+    this.lotValue = lotValue;
   }
 
 }

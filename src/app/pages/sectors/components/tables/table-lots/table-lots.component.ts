@@ -5,6 +5,9 @@ import { SalesService, getSales } from 'src/app/services/Http/sales.service';
 import { LotsService, getLots } from 'src/app/services/Http/lots.service';
 import { ChargesService, createChargues } from 'src/app/services/Http/charges.service';
 import { SalesChargesCustomersService, getSalesChargesCostomersSchema } from 'src/app/services/Http/sales-charges-customers.service';
+import { MatDialog } from '@angular/material/dialog';
+import { InvoiceComponent } from '../../invoises/invoise-lot/invoice.component';
+import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
 
 export interface PeriodicElement {
   n: number;
@@ -71,6 +74,8 @@ export class TableLotsComponent {
     private _serviceCharges: ChargesService,
     private _serviceSalesChargesCustomer: SalesChargesCustomersService,
     private cd: ChangeDetectorRef,
+    private dataInvoise: DataInvoiseService,
+    public invioiseModal: MatDialog,
   ) {
     this.editSalesChargesCustomerValue = new FormGroup({
       'collectionValue': new FormControl('', Validators.required),
@@ -82,7 +87,7 @@ export class TableLotsComponent {
 
   ngOnInit(): void {
     const idlot = Number(this.idlot);
-    if(idlot != 0){
+    if(idlot !== 0){
       this._serviceSales.getOnelot(idlot).subscribe(res => {
         this.dataSale = res;
       });
@@ -120,7 +125,6 @@ export class TableLotsComponent {
       id_customer: this.dataSale[0].ID_CLIENTE!,
     }
     this._serviceCharges.update(data.idChange!.toString(), dataNewCharges).subscribe(res => {
-      console.log(res)
       this.readOE.emit();
     });
   }
@@ -153,6 +157,16 @@ export class TableLotsComponent {
         this.readOE.emit();
       })
     })
+  }
+
+  openModal(data: PeriodicElement){
+    this.dataInvoise.sabeDate(data);
+    this.dataInvoise.sabeConcept('POR PAGO LOTE')
+    this.dataInvoise.fullOrPartialInvoice = true;
+    this.invioiseModal.open(InvoiceComponent, {
+      enterAnimationDuration: '1000ms',
+      exitAnimationDuration: '1000ms',
+    });
   }
 
 

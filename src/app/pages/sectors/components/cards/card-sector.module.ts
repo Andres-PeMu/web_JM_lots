@@ -21,8 +21,9 @@ import { CardWorkerComponent } from './card-worker/card-worker.component';
 import { StringModalComponent } from 'src/app/components/string-modal/string-modal.component';
 import { TableLotsComponent } from '../tables/table-lots/table-lots.component';
 import { CardCustomerComponent } from './card-customer/card-customer.component';
-import { InvoiceComponent } from '../tables/invoice/invoice.component';
+import { InvoiceComponent } from '../invoises/invoise-lot/invoice.component';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatBottomSheetModule,
     ReactiveFormsModule,
     MatTableModule,
-    MatGridListModule
+    MatGridListModule,
+    MatDialogModule
   ]
 })
 export class CardSectorModule { }
