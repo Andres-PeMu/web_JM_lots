@@ -17,10 +17,12 @@ import { WorkersModule } from './pages/workers/workers.module';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginModule } from './pages/login/login.module';
 import { CookieService } from 'ngx-cookie-service';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
   ],
   imports: [
     ReactiveFormsModule,

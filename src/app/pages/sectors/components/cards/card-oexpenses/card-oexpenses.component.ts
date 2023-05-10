@@ -9,6 +9,9 @@ import { WorkersService, getWorkers } from 'src/app/services/Http/workers.servic
 import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
 import { ShellOverviewOEComponent } from '../../shell-overview/shell-overview-oe/shell-overview-oe.component';
 import { DataOEService } from 'src/app/services/date/data-oe.service';
+import { MatDialog } from '@angular/material/dialog';
+import { InvoiseGoComponent } from '../../invoises/invoise-go/invoise-go.component';
+import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
 
 @Component({
   selector: 'app-card-oexpenses',
@@ -55,7 +58,9 @@ export class CardOexpensesComponent {
     private fb: FormBuilder,
     private _bottomSheet: MatBottomSheet,
     private _serviceWorkers: WorkersService,
-    private _service: OpeExpensesService
+    private _service: OpeExpensesService,
+    private dataInvoiseService: DataInvoiseService,
+    public invioiseModal: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -162,6 +167,14 @@ export class CardOexpensesComponent {
 
   handleNewPayment(){
     this.isExpanded = !this.isExpanded;
+  }
+
+  modalInvoise(){
+    this.dataInvoiseService.fullOrPartialInvoice = true;
+    this.invioiseModal.open(InvoiseGoComponent, {
+      enterAnimationDuration: '1000ms',
+      exitAnimationDuration: '1000ms',
+    });
   }
 
 }

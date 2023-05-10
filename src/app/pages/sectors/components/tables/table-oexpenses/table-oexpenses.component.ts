@@ -4,6 +4,9 @@ import { PaymentsService } from 'src/app/services/Http/payments.service';
 
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { OpwService, getPaymentsAndWorkerAndOe } from 'src/app/services/Http/opw.service';
+import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
+import { InvoiseGoComponent } from '../../invoises/invoise-go/invoise-go.component';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface PeriodicElement {
   n: number;
@@ -64,6 +67,8 @@ export class TableOexpensesComponent implements OnInit {
   constructor(
     private _serviceOpw: OpwService,
     private _service: PaymentsService,
+    private dataInvoiseService: DataInvoiseService,
+    public invioiseModal: MatDialog,
   ) {
     this.editPaymentValue = new FormGroup({
       'paymentValue': new FormControl('', Validators.required),
@@ -77,6 +82,7 @@ export class TableOexpensesComponent implements OnInit {
     const id = Number(this.idOperationalExpenses);
     this._serviceOpw.getOneOe(id).subscribe((res: getPaymentsAndWorkerAndOe[]) => {
       this.result = res;
+      this.dataInvoiseService.getPaymentsAndWorkerAndOe = this.result;
       this.result.forEach((res: getPaymentsAndWorkerAndOe, index: number) => {
         this.ELEMENT_DATA!.push(
           {
@@ -87,6 +93,7 @@ export class TableOexpensesComponent implements OnInit {
             idGop: res.ID_GOP,
           })
       });
+      this.dataInvoiseService.periodicElementGop = this.ELEMENT_DATA[0];
       this.dataSource = this.ELEMENT_DATA;
     });
   }
@@ -140,6 +147,15 @@ export class TableOexpensesComponent implements OnInit {
       }).subscribe(res => console.log(res))
       this.readOE.emit();
     })
+  }
+
+  modalInvoise(element: PeriodicElement){
+    this.dataInvoiseService.periodicElementGop = element;
+    this.dataInvoiseService.fullOrPartialInvoice = false;
+    this.invioiseModal.open(InvoiseGoComponent, {
+      enterAnimationDuration: '1000ms',
+      exitAnimationDuration: '1000ms',
+    });
   }
 
 }

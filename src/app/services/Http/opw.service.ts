@@ -28,7 +28,7 @@ export interface getPaymentsAndWorkerAndOe {
   "VALOR_HORA": number,
   "HORAS_TRABAJADAS": number,
   "VALOR_TOTAL": number,
-  "FECHA_DE_PAGO"?: string,
+  "FECHA_DE_PAGO": string,
 }
 
 @Injectable({

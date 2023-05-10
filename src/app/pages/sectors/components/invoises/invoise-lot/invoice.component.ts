@@ -30,7 +30,7 @@ export class InvoiceComponent implements OnInit {
 
   @ViewChild('content', { static: false }) content: ElementRef | undefined;
 
-  allBills: boolean = false;
+  allBills: boolean = true;
   inputDateInvice: InputDateInvice | undefined;
   dataSales: getSalesChargesCostomersSchema[] | undefined;
   totalSales: number = 0;
@@ -57,8 +57,6 @@ export class InvoiceComponent implements OnInit {
       });
       console.log('totalInvoicesForCollection', this.totalInvoicesForCollection)
       this.dataSales = dataLots;
-      console.log(this.dataSales)
-      console.log('this.totalSales', this.totalSales)
     })
     this._serviceInvoise.create({
       sectorId: parseInt(this.dataSector.id),
@@ -66,11 +64,9 @@ export class InvoiceComponent implements OnInit {
       concept: this.dataInvoise.concepto,
       idVencocli: this.dataInvoise.periodicElement.idVencocli!,
     }).subscribe((res) => {
-      console.log('res: entre', res)
     });
     this._serviceInvoise.getOneVencocli(this.dataInvoise.periodicElement.idVencocli!)
       .subscribe((dataInvoise: getInvoice[]): void => {
-        console.log('dataInvoise', dataInvoise)
         this.inputDateInvice = {
           urbanization: dataInvoise[0].NAME,
           city: 'El Bordo',

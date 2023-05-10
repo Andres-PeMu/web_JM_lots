@@ -24,11 +24,12 @@ import { CardCustomerComponent } from './card-customer/card-customer.component';
 import { InvoiceComponent } from '../invoises/invoise-lot/invoice.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule } from '@angular/material/dialog';
+import { InvoiseGoComponent } from '../invoises/invoise-go/invoise-go.component';
 
 
 @NgModule({
-  declarations: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, StringModalComponent, TableLotsComponent, CardCustomerComponent, InvoiceComponent],
-  exports: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, TableLotsComponent, CardCustomerComponent, InvoiceComponent],
+  declarations: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, StringModalComponent, TableLotsComponent, CardCustomerComponent, InvoiceComponent, InvoiseGoComponent],
+  exports: [CardSectorComponent, CardLotsComponent, CardOexpensesComponent, TableOexpensesComponent, CardWorkerComponent, TableLotsComponent, CardCustomerComponent, InvoiceComponent, InvoiseGoComponent],
   imports: [
     CommonModule,
     MatCardModule,

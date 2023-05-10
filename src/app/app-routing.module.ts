@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardGuard } from './guards/auth-guard.guard';
+import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'sectors',
-    pathMatch: 'full'
+    component: HomeComponent
+  },
+  {
+    path: 'home',
+    component: HomeComponent
   },
   {
     path: 'login',
@@ -29,7 +33,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'sectors',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
 ];

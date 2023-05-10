@@ -35,6 +35,8 @@
           (click)="handleDelete(element.idPago, element.idGop)">Eliminar</button>
         <button class=" card_actions_button " color="warn" mat-raised-button mat-button
           *ngIf="stateEdit.tr && element.n ==stateEdit.n" (click)="handleEdit(element)">Cancelar</button>
+        <button class=" card_actions_button " color="accent" mat-raised-button mat-button
+          (click)="modalInvoise(element)">Factura</button>
       </td>
     </ng-container>
 

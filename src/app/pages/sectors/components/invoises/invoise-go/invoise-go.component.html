@@ -1,34 +1,32 @@
-<div #content *ngIf="allBills">
+<div #content *ngIf="!allBills">
   <div class="content-to-hide">
     <div class="my-card">
       <div class="my-card-header">
-        <h2 class="my-card-title">Urbanizacion </h2>
+        <h2 class="my-card-title">Urbanizacion {{ invoises![0].NAME ? invoises![0].NAME : '' }}</h2>
         <h3 class="my-card-subtitle">Cel: 3128616426 - 3184554776</h3>
-        <h3>city</h3>
+        <h3>El Bordo - Cauca</h3>
         <div class="my-card-header-fech">
-          <p>Fecha: </p>
-          <p>Recibo N°: </p>
+          <p>Fecha: {{ periodicElementGop![0].FECHA_DE_PAGO ? periodicElementGop![0].FECHA_DE_PAGO : '' }}</p>
         </div>
       </div>
       <div class="my-card-content">
-        <p>Cliente: </p>
-        <p>Identificacion: </p>
-        <p>Telefono: </p>
-        <p>Por concepto de: </p>
-        <p>Numero de lote: </p>
-        <p>Valor: </p>
+        <p>Trabajador: {{ periodicElementGop![0].NOMBRE ? periodicElementGop![0].NOMBRE : '' }} {{ periodicElementGop![0].APELLIDO ? periodicElementGop![0].APELLIDO : '' }}</p>
+        <p>Identificacion: {{ periodicElementGop![0].IDENTIFICACION ? periodicElementGop![0].IDENTIFICACION : '' }}</p>
+        <p>Por concepto de: {{ invoises[0].CONCEPTO }}</p>
+        <p>Numero de lote: {{ invoises[0].NUMERO_LOTE }}</p>
+        <p>Valor: ${{ periodicElementGop![0].VALOR_PAGO ? (periodicElementGop![0].VALOR_PAGO | number) : '' }}</p>
       </div>
     </div>
   </div>
 </div>
 
-<div #content *ngIf="!allBills">
+<div #content *ngIf="allBills">
   <div id="app" class="col-11 all">
     <h2>Facturas</h2>
     <div class="row my-3">
       <div class="col-10">
         <h2></h2>
-        <p>CONCEPTO: </p>
+        <p>CONCEPTO: {{ invoises[0].CONCEPTO }}</p>
       </div>
       <div class="col-2">
         <!-- <img src="~/images/Mil-Pasos_Negro.png" /> -->
@@ -40,10 +38,9 @@
     <div class="row fact-info mt-3">
       <div class="col-3">
         <h5>Facturar a</h5>
-        <p>Cliente: </p>
-        <p>Identificacion: </p>
-        <p>Telefono: </p>
-        <p>Numero de lote: </p>
+        <p>Cliente: {{ periodicElementGop![0].NOMBRE ? periodicElementGop![0].NOMBRE : '' }} {{ periodicElementGop![0].APELLIDO ? periodicElementGop![0].APELLIDO : '' }}</p>
+        <p>Identificacion: {{ periodicElementGop![0].IDENTIFICACION ? periodicElementGop![0].IDENTIFICACION : '' }}</p>
+        <p>Numero de lote: {{ invoises[0].NUMERO_LOTE }}</p>
       </div>
     </div>
 
@@ -53,16 +50,16 @@
           <tr>
             <th>N°</th>
             <th>Fecha Pago</th>
-            <th>N° factura</th>
+            <th>N° de Identificacion </th>
             <th>Valor Pagos</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td></td>
-            <td class="td_padding"></td>
-            <td></td>
-            <td></td>
+          <tr *ngFor="let periodicElement of periodicElementGopArray; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ periodicElement.FECHA_DE_PAGO }}</td>
+            <td>{{ periodicElement.IDENTIFICACION }}</td>
+            <td>{{ periodicElement.VALOR_PAGO }}</td>
           </tr>
         </tbody>
 
@@ -70,19 +67,19 @@
           <tr>
             <th></th>
             <th></th>
-            <th>Total</th>
+            <th>Total {{ totalPayment }}</th>
             <th></th>
           </tr>
           <tr>
             <th></th>
             <th></th>
-            <th>Valor lote</th>
+            <th>Valor total {{ periodicElementGop![0].VALOR_TOTAL }}</th>
             <th></th>
           </tr>
           <tr>
             <th></th>
             <th></th>
-            <th>Saldo</th>
+            <th>Saldo {{ periodicElementGop![0].VALOR_TOTAL - totalPayment }}</th>
             <th></th>
           </tr>
         </tfoot>

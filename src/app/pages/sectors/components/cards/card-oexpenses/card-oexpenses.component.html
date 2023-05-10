@@ -141,6 +141,8 @@
         [disabled]="formEditOe.invalid">Enviar</button>
       <button class=" card_actions_button" color="warn" mat-raised-button mat-button
         *ngIf="activateIdEdit == oE.ID_GASTOS" (click)="handleCancel()">Cancelar</button>
+      <button class=" card_actions_button " color="accent" mat-raised-button mat-button
+        (click)="modalInvoise()">Factura</button>
     </mat-card-actions>
     <mat-card-footer>
       <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
