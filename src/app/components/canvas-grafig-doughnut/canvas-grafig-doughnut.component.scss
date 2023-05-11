@@ -1,0 +1,16 @@
+mat-card {
+  flex: 0 0 auto;
+  margin: 10px;
+  width: 200px;
+}
+
+.chart-container {
+  width: 200px;
+  height: 150px;
+}
+
+.horizontal-scroll {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-x: auto;
+}

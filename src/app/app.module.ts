@@ -18,11 +18,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginModule } from './pages/login/login.module';
 import { CookieService } from 'ngx-cookie-service';
 import { HomeComponent } from './pages/home/home.component';
+import { NgChartsModule } from 'ng2-charts';
+import { MatCardModule } from '@angular/material/card';
+import { CanvasGrafigDoughnutComponent } from './components/canvas-grafig-doughnut/canvas-grafig-doughnut.component';
+import { CanvasGrafigLineComponent } from './components/canvas-grafig-line/canvas-grafig-line.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    CanvasGrafigDoughnutComponent,
+    CanvasGrafigLineComponent,
   ],
   imports: [
     ReactiveFormsModule,
@@ -37,7 +43,9 @@ import { HomeComponent } from './pages/home/home.component';
     PaymentsModule,
     WorkersModule,
     HttpClientModule,
-    LoginModule
+    LoginModule,
+    NgChartsModule,
+    MatCardModule
   ],
   providers: [
     CookieService

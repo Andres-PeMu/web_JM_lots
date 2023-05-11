@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.left-column, .right-column {
+  flex: 1;
+}
+
+.left-column {
+  background-color: #f2f2f2;
+  height: 100%;
+  overflow: hidden;
+}
+
+.right-column {
+  background-color: #ffffff;
+  height: 100%;
+  overflow: hidden;
+}

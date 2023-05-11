@@ -1,0 +1,21 @@
+<div class="horizontal-scroll">
+  <mat-card *ngFor="let allSector of allSectors">
+    <mat-card-header>
+      <mat-card-title>
+        {{ allSector.NAME }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        <p>Numero de lotes: {{ allSector.NUMERO_LOTE }}</p>
+        <p>Lotes vendidos: {{ allSector.lotsSold }}</p>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="chart-container">
+        <canvas baseChart [datasets]=" [
+        {data: [allSector.NUMERO_LOTE, allSector.lotsSold], label: allSector.NAME},
+        ]" [labels]="[allSector.NAME]" [options]="barChartOptions" [legend]="barChartLegend" type="doughnut">
+        </canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

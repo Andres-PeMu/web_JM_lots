@@ -12,21 +12,6 @@ export interface getSectors {
   "NUMERO_LOTE": number,
 }
 
-// export interface getPaymentsAndWorkerAndOe {
-//   "ID_PAGOS": number,
-//   "VALOR_PAGO": number,
-//   "ID_TRABAJOR": number,
-//   "ID_GASTOS_OPERACIONES": number,
-//   "IDENTIFICACION": number,
-//   "NOMBRE": string,
-//   "APELLIDO": string,
-//   "CORREO": string,
-//   "TIPO_GASTO": string,
-//   "VALOR_HORA": number,
-//   "HORAS_TRABAJADAS": number,
-//   "VALOR_TOTAL": number,
-// }
-
 @Injectable({
   providedIn: 'root'
 })
