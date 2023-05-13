@@ -71,7 +71,6 @@ export class CardOexpensesComponent {
       idWorker: ['', Validators.required],
     });
     this._serviceWorkers.getOneSector(Number(this._dataSectors.id)).subscribe(res => {
-      console.log(res)
       this.getWorkers = res;
       this.results = res;
     });
@@ -101,7 +100,6 @@ export class CardOexpensesComponent {
     }
     this._service.create(data)
     .subscribe(res =>{
-      console.log(res);
       this.readOECard.emit();
     });
   }
@@ -117,7 +115,6 @@ export class CardOexpensesComponent {
     }
     this._service.update(id_oE.toString(), data)
     .subscribe(res =>{
-      console.log(res);
       this.readOECard.emit();
     });
   }

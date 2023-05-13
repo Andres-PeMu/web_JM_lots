@@ -111,16 +111,12 @@ export class TableOexpensesComponent implements OnInit {
       "idOperationalExpenses": this.idOperationalExpenses
     };
     this._service.update(id.toString(), dto).subscribe(res => {
-      console.log(res)
       this.readOE.emit();
     });
   }
 
   handleDelete(idPago: number, idGop: number){
-    console.log(idPago)
-    console.log(idGop)
     this._serviceOpw.delete(idGop.toString()).subscribe(res => {
-      console.log(res);
       this._service.delete(idPago.toString()).subscribe(res => console.log(res));
     });
     this.readOE.emit();
@@ -139,12 +135,11 @@ export class TableOexpensesComponent implements OnInit {
       "idOperationalExpenses": this.idOperationalExpenses,
     };
     this._service.create(dto).subscribe(res =>{
-      console.log(res.ID_PAGOS);
       this._serviceOpw.create({
         "idOE": this.idOperationalExpenses,
         "idPayment": res.ID_PAGOS,
         "idWorker": this.idWorker,
-      }).subscribe(res => console.log(res))
+      }).subscribe()
       this.readOE.emit();
     })
   }

@@ -76,6 +76,7 @@ export class TableLotsComponent {
     private cd: ChangeDetectorRef,
     private dataInvoise: DataInvoiseService,
     public invioiseModal: MatDialog,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     this.editSalesChargesCustomerValue = new FormGroup({
       'collectionValue': new FormControl('', Validators.required),

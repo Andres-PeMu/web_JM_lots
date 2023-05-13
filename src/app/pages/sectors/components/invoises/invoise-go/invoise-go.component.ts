@@ -45,6 +45,7 @@ export class InvoiseGoComponent implements OnInit {
   constructor(
     public datalot: DataLotsService,
     public dataInvoise: DataInvoiseService,
+    public dataSector: DataLotsService,
     private serviseGop: OpwService,
     private invoiceGopService: InvoiceGopService,
   ) { }
@@ -56,7 +57,16 @@ export class InvoiseGoComponent implements OnInit {
       console.log('invoises', this.invoises)
     });
     const idOE = this.dataInvoise.getPaymentsAndWorkerAndOe[0].ID_GASTOS_OPERACIONES;
+    const idSector = parseInt(this.dataSector.id);
     this.serviseGop.getOneOe(idOE).subscribe(datas => {
+      datas.forEach(createInviose =>{
+        this.invoiceGopService.create({
+          sectorId: idSector,
+          workerId: createInviose.ID_TRABAJOR,
+          concept: createInviose.TIPO_GASTO,
+          idGop: idOE,
+        })
+      })
       this.periodicElementGopArray = datas;
       console.log('periodicElementGopArray', this.periodicElementGopArray)
       datas.forEach(data => {
