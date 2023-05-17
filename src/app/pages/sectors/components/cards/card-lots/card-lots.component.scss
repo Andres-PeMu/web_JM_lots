@@ -34,3 +34,29 @@ mat-card-title{
   flex-wrap: wrap;
   align-items: center;
 }
+
+.card_actions_button {
+  margin: 4px;
+}
+
+.card_header_button {
+  height: 54px;
+}
+
+.card_div_header_container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: row;
+}
+
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+  margin-top: 24px;
+}

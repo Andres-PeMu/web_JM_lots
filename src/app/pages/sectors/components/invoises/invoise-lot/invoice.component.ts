@@ -47,15 +47,25 @@ export class InvoiceComponent implements OnInit {
   ngOnInit(): void {
     this.allBills = this.dataInvoise.fullOrPartialInvoice;
     const idlot = parseInt(this.datalot.id);
+    this.dataInvoise.periodicElementAll.forEach(inviose => {
+      this._serviceInvoise.create({
+        sectorId: idlot,
+        customerId: inviose.idCustomer!,
+        concept: this.dataInvoise.concepto,
+        idVencocli: inviose.idVencocli!,
+      }).subscribe((res) => { });
+    })
     this._salesChargesCustomersService.getOneLots(idlot).subscribe(dataLots => {
       dataLots.forEach(data => {
         this.totalSales += data.VALOR_COBRO;
       });
       dataLots.forEach(data => {
         this._serviceInvoise.getOneVencocli(data.ID_VENCOCLI)
-          .subscribe(invoise => this.totalInvoicesForCollection?.push(...invoise))
+          .subscribe(invoise => {
+            this.totalInvoicesForCollection?.push(...invoise)
+            this.setInputData();
+          })
       });
-      console.log('totalInvoicesForCollection', this.totalInvoicesForCollection)
       this.dataSales = dataLots;
     })
     this._serviceInvoise.create({
@@ -63,23 +73,26 @@ export class InvoiceComponent implements OnInit {
       customerId: this.dataInvoise.periodicElement.idCustomer!,
       concept: this.dataInvoise.concepto,
       idVencocli: this.dataInvoise.periodicElement.idVencocli!,
-    }).subscribe((res) => {
+    }).subscribe((res) => { });
+    this.setInputData();
+  }
+
+  private setInputData(): void {
+    const idVencocli = this.allBills ? this.dataInvoise.periodicElement.idVencocli! : this.totalInvoicesForCollection[0].ID_VENCOCLI!;
+    this._serviceInvoise.getOneVencocli(idVencocli).subscribe((dataInvoise: getInvoice[]): void => {
+      this.inputDateInvice = {
+        urbanization: dataInvoise[0].NAME,
+        city: 'El Bordo',
+        date: new Date().toLocaleDateString().toString(),
+        identification: dataInvoise[0].IDENTIFICACION,
+        client: `${dataInvoise[0].NOMBRE} ${dataInvoise[0].APELLIDO}`,
+        phone: dataInvoise[0].TELEFONO,
+        concept: this.dataInvoise.concepto,
+        lotNumber: dataInvoise[0].NUMERO_LOTE,
+        value: dataInvoise[0].VALOR_COBRO,
+        numberReceipt: dataInvoise[0].NUMERO_FACTURA,
+      };
     });
-    this._serviceInvoise.getOneVencocli(this.dataInvoise.periodicElement.idVencocli!)
-      .subscribe((dataInvoise: getInvoice[]): void => {
-        this.inputDateInvice = {
-          urbanization: dataInvoise[0].NAME,
-          city: 'El Bordo',
-          date: new Date().toLocaleDateString().toString(),
-          identification: dataInvoise[0].IDENTIFICACION,
-          client: `${dataInvoise[0].NOMBRE} ${dataInvoise[0].APELLIDO}`,
-          phone: dataInvoise[0].TELEFONO,
-          concept: this.dataInvoise.concepto,
-          lotNumber: dataInvoise[0].NUMERO_LOTE,
-          value: dataInvoise[0].VALOR_COBRO,
-          numberReceipt: dataInvoise[0].NUMERO_FACTURA,
-        };
-      });
   }
 
   generatePDF() {

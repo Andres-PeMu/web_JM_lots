@@ -22,6 +22,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { MatCardModule } from '@angular/material/card';
 import { CanvasGrafigDoughnutComponent } from './components/canvas-grafig-doughnut/canvas-grafig-doughnut.component';
 import { CanvasGrafigLineComponent } from './components/canvas-grafig-line/canvas-grafig-line.component';
+import { ScrollPositionDirective } from './directives/scroll-position.directive';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { CanvasGrafigLineComponent } from './components/canvas-grafig-line/canva
     HomeComponent,
     CanvasGrafigDoughnutComponent,
     CanvasGrafigLineComponent,
+    ScrollPositionDirective,
   ],
   imports: [
     ReactiveFormsModule,

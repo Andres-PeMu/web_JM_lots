@@ -11,7 +11,6 @@ export class SectorsComponent implements OnInit {
 
   getSectors: getSectors[] = [];
   sectors: getSectors[] = []
-  nuevo: any;
 
   constructor(
     private _service: SectorsService

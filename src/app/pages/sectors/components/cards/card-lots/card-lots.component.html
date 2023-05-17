@@ -1,3 +1,12 @@
+<div class="card_div_header_container">
+  <mat-form-field class="example-full-width example-form" appearance="fill">
+    <mat-label>Numero de lote</mat-label>
+    <input type="text" matInput (keyup)="handleChangelots($event)">
+  </mat-form-field>
+  <button class="card_header_button" color="primary" mat-raised-button mat-button>
+    <mat-icon>search</mat-icon>
+  </button>
+</div>
 <div class="card_comp_charge">
   <mat-card *ngFor="let lot of lots" class="example-card">
     <mat-divider></mat-divider>

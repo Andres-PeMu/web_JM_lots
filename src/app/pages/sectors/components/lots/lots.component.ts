@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { LotsService, getLots } from 'src/app/services/Http/lots.service';
 import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
-import { Subscription, catchError, of } from 'rxjs';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-lots',
@@ -12,6 +12,7 @@ import { Subscription, catchError, of } from 'rxjs';
 export class LotsComponent implements OnInit {
   @Output() readLots = new EventEmitter();
   lots: getLots[] = [];
+  getlots: getLots[] = [];
 
   constructor(
     private _service: LotsService,
@@ -20,6 +21,7 @@ export class LotsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.lots = []
     if (this._dataServise.id) {
       this.generateLots();
     } else {
@@ -53,7 +55,7 @@ export class LotsComponent implements OnInit {
   }
 
   readLot(){
-    this.readLots.emit();
+    this.ngOnInit();
   }
 
 }

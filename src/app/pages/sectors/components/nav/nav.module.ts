@@ -9,8 +9,8 @@ import { OperationalExpensesComponent } from '../operational-expenses/operationa
 import { WorkersComponent } from '../workers/workers.component';
 import { CardSectorModule } from "../cards/card-sector.module";
 import { CustomersComponent } from '../customers/customers.component';
-
-
+import { MatIconModule } from '@angular/material/icon';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
     declarations: [NavComponent, LotsComponent, OperationalExpensesComponent, WorkersComponent, CustomersComponent],
@@ -20,6 +20,8 @@ import { CustomersComponent } from '../customers/customers.component';
         NavRoutingModule,
         MatButtonModule,
         CardSectorModule,
+        MatIconModule,
+        MatFormFieldModule,
     ]
 })
 export class NavModule { }

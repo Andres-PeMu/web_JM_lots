@@ -25,6 +25,6 @@ import { ShellOverviewLotsComponent } from './components/shell-overview/shell-ov
     MatIconModule,
     MatButtonModule,
   ],
-  exports: [SectorsComponent]
+  exports: [SectorsComponent, ShellOverviewComponent, ShellOverviewOEComponent, ShellOverviewLotsComponent]
 })
 export class SectorsModule { }

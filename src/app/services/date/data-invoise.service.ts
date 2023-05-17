@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PeriodicElement } from 'src/app/pages/sectors/components/tables/table-lots/table-lots.component';
+import { PeriodicElementLots } from 'src/app/pages/sectors/components/tables/table-lots/table-lots.component';
 import { PeriodicElement as Periodic } from 'src/app/pages/sectors/components/tables/table-oexpenses/table-oexpenses.component';
 import { getPaymentsAndWorkerAndOe } from '../Http/opw.service';
 
@@ -8,7 +8,7 @@ import { getPaymentsAndWorkerAndOe } from '../Http/opw.service';
   providedIn: 'root'
 })
 export class DataInvoiseService {
-  periodicElement: PeriodicElement = {
+  periodicElement: PeriodicElementLots = {
     n: 0,
     chargesValue: 0,
     date: '',
@@ -26,6 +26,7 @@ export class DataInvoiseService {
     idGop: 0,
     idPago: 0,
   }
+  periodicElementAll: PeriodicElementLots[] = []
 
   concepto : string = '';
 
@@ -33,8 +34,12 @@ export class DataInvoiseService {
 
   constructor() { }
 
-  sabeDate(data: PeriodicElement){
+  sabeDate(data: PeriodicElementLots){
     this.periodicElement = data;
+  }
+
+  sabeDateAll(data: PeriodicElementLots[]){
+    this.periodicElementAll = data;
   }
 
   sabeConcept(concept: string){

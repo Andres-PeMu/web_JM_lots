@@ -6,14 +6,14 @@ import { PaymentsService, getPaymentsAndWorkerAndOe } from 'src/app/services/Htt
   templateUrl: './payments.component.html',
   styleUrls: ['./payments.component.scss']
 })
-export class PaymentsComponent implements OnInit{
+export class PaymentsComponent implements OnInit {
 
   getPayments: getPaymentsAndWorkerAndOe[] = [];
   results: getPaymentsAndWorkerAndOe[] | undefined = []
 
   constructor(
     private _service: PaymentsService
-  ){}
+  ) { }
 
   ngOnInit(): void {
     this._service.getAndWorkerAndOEAll().subscribe(res => {

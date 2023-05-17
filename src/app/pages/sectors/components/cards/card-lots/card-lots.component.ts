@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { DataLotsService } from 'src/app/services/date/data-lots.service';
 import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InvoiceComponent } from '../../invoises/invoise-lot/invoice.component';
+import { ScrollService } from 'src/app/services/directive/scroll.service';
 
 export interface formEditSector {
   "lotValue": string,
@@ -23,7 +24,7 @@ export interface formEditSector {
   templateUrl: './card-lots.component.html',
   styleUrls: ['./card-lots.component.scss']
 })
-export class CardLotsComponent {
+export class CardLotsComponent implements OnInit {
   @Output() readLot = new EventEmitter()
 
   formEditSector!: FormGroup;
@@ -34,10 +35,11 @@ export class CardLotsComponent {
   dataSales: getLots | undefined;
 
   getCustomers: getCustomers[] = [];
-  results: getCustomers[] | undefined = []
+  results: getCustomers[] | undefined = [];
   filteredOptions: Observable<getCustomers[]> | undefined;
 
-  @Input() lots: getLots[] = []
+  @Input() lots: getLots[] = [];
+  lotsChange: getLots[] = [];
 
   constructor(
     private _serviceLots: LotsService,
@@ -52,9 +54,8 @@ export class CardLotsComponent {
     public invioiseModal: MatDialog,
   ) { }
 
-  ngOnDestroy() { }
-
   ngOnInit(): void {
+    this.lotsChange = this.lots;
     this.formEditSector = this.fb.group({
       lotValue: ['', Validators.required],
       id_customer: ['', Validators.required]
@@ -94,13 +95,13 @@ export class CardLotsComponent {
       id_sector,
       lotNumber,
     }
-    console.log(data)
     this._serviceLots.create(data).subscribe(res => {
       this._serviceSales.create({
         salesValue: data.lotValue,
         id_lots: res.ID_LOTES,
         id_customer: data.id_customer,
       }).subscribe(res => {
+        this.handleCancel();
         this.readLot.emit();
       });
     });
@@ -121,6 +122,7 @@ export class CardLotsComponent {
         id_lots: this.dataSales.ID_LOTES!,
         id_customer: data.id_customer,
       }).subscribe(res => {
+        this.handleCancel();
         this.readLot.emit();
       })
     });
@@ -164,7 +166,17 @@ export class CardLotsComponent {
     return this.results = this.getCustomers;
   }
 
+  handleChangelots(event: Event) {
+    const query = (event.target as HTMLInputElement).value.toLowerCase();
+    if (this.lots!.length !== 0) {
+      this.lots = this.lotsChange.filter(d => d.NUMERO_LOTE.toString().toLowerCase().indexOf(query) > -1);
+      return this.lots;
+    }
+    return this.lots = this.lotsChange;
+  }
+
   handleRead() {
+    this.handleCancel();
     this.readLot.emit();
   }
 
@@ -177,5 +189,11 @@ export class CardLotsComponent {
       exitAnimationDuration: '1000ms',
     });
   }
+
+  // restoreScroll(){
+  //   const scrollPosition = this.scrollService.getPosition();
+  //   const element = document.querySelector('.scroll-container') as HTMLElement;
+  //   element.animate({ scrollTop: scrollPosition }, 400);
+  // }
 
 }

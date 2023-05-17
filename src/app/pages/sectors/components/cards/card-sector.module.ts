@@ -44,7 +44,7 @@ import { InvoiseGoComponent } from '../invoises/invoise-go/invoise-go.component'
     ReactiveFormsModule,
     MatTableModule,
     MatGridListModule,
-    MatDialogModule
+    MatDialogModule,
   ]
 })
 export class CardSectorModule { }

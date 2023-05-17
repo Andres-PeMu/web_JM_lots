@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { InvoiceComponent } from '../../invoises/invoise-lot/invoice.component';
 import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
 
-export interface PeriodicElement {
+export interface PeriodicElementLots {
   n: number;
   chargesValue: number;
   date: string;
@@ -35,8 +35,8 @@ export interface PeriodicElement {
       transition('rotado => normal', animate('200ms'))
     ]),
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ]
@@ -55,17 +55,17 @@ export class TableLotsComponent {
   stateButton = 'normal';
   stateButtonColor = 'accent';
 
-  stateEdit= {
+  stateEdit = {
     tr: false,
     n: 0
   };
 
-  dataSale: getSales[]= [];
-  dataLot: getLots[]= [];
-  ELEMENT_DATA: PeriodicElement[] = [];
+  dataSale: getSales[] = [];
+  dataLot: getLots[] = [];
+  ELEMENT_DATA: PeriodicElementLots[] = [];
   dataresult: getSalesChargesCostomersSchema[] = []
   resultGetSalesChargesCostomer: getSalesChargesCostomersSchema[] = []
-  dataSource: PeriodicElement[] = []
+  dataSource: PeriodicElementLots[] = []
   displayedColumns: string[] = ['n', 'chargesValue', 'date', 'expand'];
 
   constructor(
@@ -76,7 +76,6 @@ export class TableLotsComponent {
     private cd: ChangeDetectorRef,
     private dataInvoise: DataInvoiseService,
     public invioiseModal: MatDialog,
-    private changeDetectorRef: ChangeDetectorRef
   ) {
     this.editSalesChargesCustomerValue = new FormGroup({
       'collectionValue': new FormControl('', Validators.required),
@@ -87,8 +86,11 @@ export class TableLotsComponent {
   }
 
   ngOnInit(): void {
+    this.stateEdit.tr = false;
+    this.dataSource = [];
+    this.ELEMENT_DATA = [];
     const idlot = Number(this.idlot);
-    if(idlot !== 0){
+    if (idlot !== 0) {
       this._serviceSales.getOnelot(idlot).subscribe(res => {
         this.dataSale = res;
       });
@@ -109,58 +111,61 @@ export class TableLotsComponent {
               })
           });
           this.dataSource = this.ELEMENT_DATA;
+          this.dataInvoise.sabeDateAll(this.dataSource)
         });
       });
     };
   }
 
-  handleEdit(data: PeriodicElement) {
+  handleEdit(data: PeriodicElementLots) {
     this.editSalesChargesCustomerValue.controls['collectionValue']?.setValue(data.chargesValue);
     this.stateEdit.n = data.n;
     this.stateEdit.tr = !this.stateEdit.tr;
   }
 
-  handleSave(data: PeriodicElement){
+  handleSave(data: PeriodicElementLots) {
     const dataNewCharges: createChargues = {
       ...this.editSalesChargesCustomerValue.value,
       id_customer: this.dataSale[0].ID_CLIENTE!,
     }
     this._serviceCharges.update(data.idChange!.toString(), dataNewCharges).subscribe(res => {
-      this.readOE.emit();
+      this.ngOnInit();
     });
   }
 
-  handleDelete(idPago: number){
-    const dataCharges = this.resultGetSalesChargesCostomer.filter(data =>  idPago === data.ID_COBROS)
+  handleDelete(idPago: number) {
+    const dataCharges = this.resultGetSalesChargesCostomer.filter(data => idPago === data.ID_COBROS)
     this._serviceCharges.delete(idPago.toString()).subscribe(res => {
       this._serviceSalesChargesCustomer.delete(dataCharges[0].ID_VENCOCLI.toString()).subscribe(res => this.cd.detectChanges());
     });
-    this.readOE.emit();
+    this.ngOnInit();
   }
 
-  handleNewPayment(){
+  handleNewPayment() {
     this.stateButton = (this.stateButton === 'normal') ? 'rotado' : 'normal';
     this.stateButtonColor = (this.stateButtonColor === 'accent') ? 'warn' : 'accent';
     this.isExpanded = !this.isExpanded;
   }
 
-  handleSavePayment(){
+  handleSavePayment() {
     const dataNewCharges: createChargues = {
       ...this.newSalesChargesCustomerValue.value,
       id_customer: this.dataSale[0].ID_CLIENTE!,
     }
-    this._serviceCharges.create(dataNewCharges).subscribe(resultServiceCharges =>{
+    this._serviceCharges.create(dataNewCharges).subscribe(resultServiceCharges => {
       this._serviceSalesChargesCustomer.create({
         idSales: this.dataSale[0].ID_VENTAS!,
         idCharges: resultServiceCharges.ID_COBROS,
         idCustomers: this.dataSale[0].ID_CLIENTE!
-      }).subscribe(resultServiceSales =>{
-        this.readOE.emit();
+      }).subscribe(resultServiceSales => {
+        this.newSalesChargesCustomerValue.reset();
+        this.handleNewPayment();
+        this.ngOnInit();
       })
     })
   }
 
-  openModal(data: PeriodicElement){
+  openModal(data: PeriodicElementLots) {
     this.dataInvoise.sabeDate(data);
     this.dataInvoise.sabeConcept('POR PAGO LOTE')
     this.dataInvoise.fullOrPartialInvoice = true;

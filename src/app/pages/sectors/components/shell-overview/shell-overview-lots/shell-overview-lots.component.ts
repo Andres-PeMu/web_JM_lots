@@ -3,6 +3,7 @@ import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { CardLotsComponent } from '../../cards/card-lots/card-lots.component';
 import { LotsService } from 'src/app/services/Http/lots.service';
 import { DataLotsService } from 'src/app/services/date/data-lots.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-shell-overview-lots',
@@ -14,13 +15,13 @@ export class ShellOverviewLotsComponent {
   constructor(
     private _bottomSheetRef: MatBottomSheetRef<CardLotsComponent>,
     private _serviceLots: LotsService,
-    private dataServiceLots: DataLotsService
+    private dataServiceLots: DataLotsService,
+    private router: Router,
     ){}
 
   handleDelete(){
     this._serviceLots.delete(this.dataServiceLots.id).subscribe(res =>{
-      console.log(res);
-      window.location.reload();
+      this.router.navigate(['/sectors'])
     });
     this._bottomSheetRef.dismiss();
   }
