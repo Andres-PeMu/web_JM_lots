@@ -40,7 +40,7 @@ export class CardComponent {
       "collectionValue": value,
       "id_customer": idCostumer
     };
-    this._service.update(idChanges.toString(), data).subscribe( data => console.log(data));
+    // this._service.update(idChanges.toString(), data).subscribe( data => console.log(data));
     window.location.reload();
   }
 

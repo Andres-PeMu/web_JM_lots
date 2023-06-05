@@ -190,10 +190,4 @@ export class CardLotsComponent implements OnInit {
     });
   }
 
-  // restoreScroll(){
-  //   const scrollPosition = this.scrollService.getPosition();
-  //   const element = document.querySelector('.scroll-container') as HTMLElement;
-  //   element.animate({ scrollTop: scrollPosition }, 400);
-  // }
-
 }

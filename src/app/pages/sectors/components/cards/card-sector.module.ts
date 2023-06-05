@@ -25,6 +25,8 @@ import { InvoiceComponent } from '../invoises/invoise-lot/invoice.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { InvoiseGoComponent } from '../invoises/invoise-go/invoise-go.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -45,6 +47,8 @@ import { InvoiseGoComponent } from '../invoises/invoise-go/invoise-go.component'
     MatTableModule,
     MatGridListModule,
     MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
 export class CardSectorModule { }

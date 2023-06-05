@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export interface createChargues {
   collectionValue: number;
   id_customer: number;
+  date: string;
 }
 
 export interface resultnewChargues {

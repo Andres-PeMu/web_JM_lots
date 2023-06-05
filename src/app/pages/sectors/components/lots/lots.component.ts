@@ -36,17 +36,6 @@ export class LotsComponent implements OnInit {
         "id_sector": Number(this._dataServise.id),
       }
       this._service.getOnelotAndSector(data.lotNumber, data.id_sector!)
-      .pipe(
-        catchError(error => {
-          return of([{
-            "ID_LOTES": lotsLup + 1,
-            "NUMERO_LOTE": lotsLup + 1,
-            "VALOR_LOTE": 0,
-            "ID_SECTOR": Number(this._dataServise.id),
-            "ID_CLIENTE": 0,
-          }]);
-        })
-      )
       .subscribe(res => {
         this.lots.push(res[0]);
         this.lots.sort((a, b) => a.NUMERO_LOTE - b.NUMERO_LOTE);
