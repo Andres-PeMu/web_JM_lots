@@ -30,7 +30,9 @@ export class OperationalExpensesComponent   implements OnInit {
   }
 
   reload(){
-    this.readOE.emit();
+    this.oExpenses = [];
+    this.ngOnInit();
+    // this.readOE.emit();
   }
 
 }

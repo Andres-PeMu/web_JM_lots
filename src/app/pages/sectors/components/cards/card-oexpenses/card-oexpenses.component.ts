@@ -84,8 +84,15 @@ export class CardOexpensesComponent {
     this.valueInputEdit = query;
   }
 
-  handleEdit(id: number) {
-    this.activateIdEdit = id;
+  handleEdit(data: getOe) {
+    this.formEditOe.patchValue({
+      expenseType: data.TIPO_GASTO,
+      hourValue: data.VALOR_HORA,
+      hourValueWorked: data.HORAS_TRABAJADAS,
+      idWorker: data.ID_TRABAJADOR,
+    });
+    this.formEditOe
+    this.activateIdEdit = data.ID_GASTOS;
   }
 
   handleSaveNew() {
@@ -99,7 +106,11 @@ export class CardOexpensesComponent {
     }
     this._service.create(data)
     .subscribe(res =>{
+      this.getWorkers = [];
+      this.results = [];
       this.readOECard.emit();
+      this.ngOnInit();
+      this.activateIdEdit = undefined;
     });
   }
 
@@ -112,9 +123,14 @@ export class CardOexpensesComponent {
       idSector,
       fullValue
     }
+    console.log(data)
     this._service.update(id_oE.toString(), data)
     .subscribe(res =>{
+      this.getWorkers = [];
+      this.results = [];
       this.readOECard.emit();
+      this.ngOnInit();
+      this.activateIdEdit = undefined;
     });
   }
 
@@ -158,7 +174,9 @@ export class CardOexpensesComponent {
   }
 
   handleRead(){
-    this.readOECard.emit();
+    this.getWorkers = [];
+    this.results = [];
+    this.ngOnInit();
   }
 
   handleNewPayment(){

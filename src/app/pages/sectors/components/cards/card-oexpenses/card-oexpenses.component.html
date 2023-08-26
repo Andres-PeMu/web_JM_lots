@@ -69,7 +69,7 @@
       <mat-card-subtitle>lotes</mat-card-subtitle>
       <mat-card-title>
         <div *ngFor="let worker of getWorkers">
-          <mat-card-title *ngIf="oE.ID_TRABAJADOR== worker.ID_TRABAJADORES">{{ worker.NOMBRE }} {{ worker.APELLIDO
+          <mat-card-title *ngIf="oE.ID_TRABAJADOR == worker.ID_TRABAJADORES">{{ worker.NOMBRE }} {{ worker.APELLIDO
             }}</mat-card-title>
         </div>
       </mat-card-title>
@@ -86,7 +86,7 @@
         </section>
         <section>
           <app-table-oexpenses  [idWorker]="oE.ID_TRABAJADOR" [idOperationalExpenses]="oE.ID_GASTOS"
-            (readOE)="handleRead()"></app-table-oexpenses>
+          [OperationalExpensesTotal]="oE" (readOE)="handleRead()"></app-table-oexpenses>
         </section>
       </div>
       <section [formGroup]="formEditOe" class="example-full-width example-form" appearance="fill"
@@ -133,7 +133,7 @@
     </mat-card-content>
     <mat-card-actions>
       <button class="card_actions_button" color="primary" mat-raised-button mat-button
-        (click)="handleEdit(oE.ID_GASTOS)" *ngIf="activateIdEdit == undefined">Editar</button>
+        (click)="handleEdit(oE)" *ngIf="activateIdEdit == undefined">Editar</button>
         <button class="card_actions_button" color="warn" mat-raised-button mat-button
         (click)="handleDelete(oE.ID_GASTOS)" *ngIf="activateIdEdit == undefined">Eliminar</button>
       <button class="card_actions_button" color="accent" mat-raised-button mat-button

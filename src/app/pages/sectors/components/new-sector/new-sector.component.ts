@@ -38,7 +38,6 @@ export class NewSectorComponent {
     let data = this.newSector.value;
     data = this.convertToUppercase(data);
     this._service.create(data).subscribe(res => {
-      console.log(res)
       window.location.reload()
     });
   }

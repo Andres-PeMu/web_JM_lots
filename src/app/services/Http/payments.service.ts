@@ -5,6 +5,7 @@ export interface createPayments {
   "paymentValue": number,
   "idWorker": number,
   "idOperationalExpenses": number,
+  PaymentDate: string,
 }
 
 export interface getPayments {

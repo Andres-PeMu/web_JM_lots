@@ -5,6 +5,7 @@ import { DataLotsService } from 'src/app/services/date/data-lots.service';
 import { InvoiceGopService, getInvoiceGo } from 'src/app/services/Http/invoice-gop.service';
 import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
 import { OpwService, getPaymentsAndWorkerAndOe } from 'src/app/services/Http/opw.service';
+import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
 
 @Component({
   selector: 'app-invoise-go',
@@ -18,9 +19,9 @@ export class InvoiseGoComponent implements OnInit {
 
   allBills: boolean = false;
   totalPayment: number = 0;
-  invoises: getInvoiceGo[] =[]
-  periodicElementGop: getPaymentsAndWorkerAndOe[] | undefined = []
-  periodicElementGopArray: getPaymentsAndWorkerAndOe[] | undefined = []
+  invoises: getInvoiceGo[] = [];
+  periodicElementGop: getPaymentsAndWorkerAndOe[] | undefined = [];
+  periodicElementGopArray: getPaymentsAndWorkerAndOe[] | undefined = [];
   dataInvoises: getInvoiceGo = {
     ID_FACTURA_PAGO: 0,
     NUMERO_FACTURA: 0,
@@ -45,55 +46,44 @@ export class InvoiseGoComponent implements OnInit {
   constructor(
     public datalot: DataLotsService,
     public dataInvoise: DataInvoiseService,
-    public dataSector: DataLotsService,
+    public dataSector: DataSectorsService,
     private serviseGop: OpwService,
     private invoiceGopService: InvoiceGopService,
   ) { }
 
   ngOnInit(): void {
-    this.allBills = this.dataInvoise.fullOrPartialInvoice;
+    this.invoises = [];
     this.invoiceGopService.getAll().subscribe(res => {
       this.invoises = res;
-      console.log('invoises', this.invoises)
     });
-    const idOE = this.dataInvoise.getPaymentsAndWorkerAndOe[0].ID_GASTOS_OPERACIONES;
-    const idSector = parseInt(this.dataSector.id);
-    this.serviseGop.getOneOe(idOE).subscribe(datas => {
-      datas.forEach(createInviose =>{
-        this.invoiceGopService.create({
-          sectorId: idSector,
-          workerId: createInviose.ID_TRABAJOR,
-          concept: createInviose.TIPO_GASTO,
-          idGop: idOE,
-        })
-      })
-      this.periodicElementGopArray = datas;
-      console.log('periodicElementGopArray', this.periodicElementGopArray)
-      datas.forEach(data => {
-        if(data.ID_GOP === this.dataInvoise.periodicElementGop.idGop!){
-          this.periodicElementGop?.push(data);
-          console.log('this.periodicElementGop', this.periodicElementGop)
+    const idgastoO = this.dataInvoise.getPaymentsAndWorkerAndOe[0].ID_GASTOS_OPERACIONES;
+    this.serviseGop.getOneOe(idgastoO).subscribe(datas => {
+      this.periodicElementGopArray = datas || [];
+      datas?.forEach(data => {
+        if (data.ID_GOP === this.dataInvoise.periodicElementGop?.idGop) {
+          this.periodicElementGop!.push(data);
         }
-        this.totalPayment += data.VALOR_PAGO;
-        console.log('this.totalPayment', this.totalPayment)
-      })
-    })
+        this.totalPayment += data.VALOR_PAGO || 0;
+      });
+    });
+    this.allBills = this.dataInvoise.fullOrPartialInvoice;
   }
 
   generatePDF() {
-    const doc = new jsPDF.jsPDF();
-    const content = this.content?.nativeElement;
-    html2canvas(content).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const imgWidth = 205;
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-      let position = 0;
-
-      doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      position -= (imgHeight + 10);
-
-      doc.save('pdf_generado_desde_angular.pdf');
-    });
+    if (this.content) {
+      const doc = new jsPDF.jsPDF();
+      const content = this.content.nativeElement;
+      html2canvas(content).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = 205;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let position = 0;
+        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        position -= (imgHeight + 10);
+        doc.autoPrint();
+        window.open(doc.output('bloburl'), '_blank');
+      });
+    }
   }
 
 }

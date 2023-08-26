@@ -38,7 +38,6 @@ export class InvoiceComponent implements OnInit {
 
   constructor(
     private _serviceInvoise: InvoiceService,
-    private dataSector: DataSectorsService,
     private dataInvoise: DataInvoiseService,
     public datalot: DataLotsService,
     private _salesChargesCustomersService: SalesChargesCustomersService
@@ -47,14 +46,6 @@ export class InvoiceComponent implements OnInit {
   ngOnInit(): void {
     this.allBills = this.dataInvoise.fullOrPartialInvoice;
     const idlot = parseInt(this.datalot.id);
-    this.dataInvoise.periodicElementAll.forEach(inviose => {
-      this._serviceInvoise.create({
-        sectorId: idlot,
-        customerId: inviose.idCustomer!,
-        concept: this.dataInvoise.concepto,
-        idVencocli: inviose.idVencocli!,
-      }).subscribe((res) => { });
-    })
     this._salesChargesCustomersService.getOneLots(idlot).subscribe(dataLots => {
       dataLots.forEach(data => {
         this.totalSales += data.VALOR_COBRO;
@@ -68,12 +59,6 @@ export class InvoiceComponent implements OnInit {
       });
       this.dataSales = dataLots;
     })
-    this._serviceInvoise.create({
-      sectorId: parseInt(this.dataSector.id),
-      customerId: this.dataInvoise.periodicElement.idCustomer!,
-      concept: this.dataInvoise.concepto,
-      idVencocli: this.dataInvoise.periodicElement.idVencocli!,
-    }).subscribe((res) => { });
     this.setInputData();
   }
 
@@ -96,18 +81,19 @@ export class InvoiceComponent implements OnInit {
   }
 
   generatePDF() {
-    const doc = new jsPDF.jsPDF();
-    const content = this.content?.nativeElement;
-    html2canvas(content).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const imgWidth = 205;
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-      let position = 0;
-
-      doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      position -= (imgHeight + 10);
-
-      doc.save('pdf_generado_desde_angular.pdf');
-    });
+    if (this.content) {
+      const doc = new jsPDF.jsPDF();
+      const content = this.content.nativeElement;
+      html2canvas(content).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = 205;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let position = 0;
+        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        position -= (imgHeight + 10);
+        doc.autoPrint();
+        window.open(doc.output('bloburl'), '_blank');
+      });
+    }
   }
 }

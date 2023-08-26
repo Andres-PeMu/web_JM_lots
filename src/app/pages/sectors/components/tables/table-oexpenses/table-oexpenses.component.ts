@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PaymentsService } from 'src/app/services/Http/payments.service';
 
 import { trigger, state, style, animate, transition } from '@angular/animations';
@@ -7,6 +7,9 @@ import { OpwService, getPaymentsAndWorkerAndOe } from 'src/app/services/Http/opw
 import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
 import { InvoiseGoComponent } from '../../invoises/invoise-go/invoise-go.component';
 import { MatDialog } from '@angular/material/dialog';
+import { InvoiceGopService } from 'src/app/services/Http/invoice-gop.service';
+import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
+import { getOe } from 'src/app/services/Http/ope-expenses.service';
 
 export interface PeriodicElement {
   n: number;
@@ -32,8 +35,8 @@ export interface PeriodicElement {
       transition('rotado => normal', animate('200ms'))
     ]),
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ]
@@ -45,16 +48,26 @@ export class TableOexpensesComponent implements OnInit {
 
   @Input() idWorker: number = 0;
   @Input() idOperationalExpenses: number = 0;
+  @Input() OperationalExpensesTotal: getOe = {
+    ID_GASTOS: 0,
+    TIPO_GASTO: '',
+    VALOR_HORA: 0,
+    HORAS_TRABAJADAS: 0,
+    ID_TRABAJADOR: 0,
+    ID_SECTOR: 0,
+    VALOR_TOTAL: 0
+  };
 
   editPaymentValue: FormGroup;
   newPaymentValue: FormGroup;
+  newPaymenChargesCustomerValue: FormGroup;
 
   isExpanded = false;
 
   stateButton = 'normal';
   stateButtonColor = 'accent';
 
-  stateEdit= {
+  stateEdit = {
     tr: false,
     n: 0
   };
@@ -62,6 +75,11 @@ export class TableOexpensesComponent implements OnInit {
   ELEMENT_DATA: PeriodicElement[] = [];
   result: getPaymentsAndWorkerAndOe[] = []
   dataSource: PeriodicElement[] = []
+  dataSourceNewPayment: PeriodicElement[] = [{
+    n: 0,
+    paymentValue: 0,
+    date: ''
+  }];
   displayedColumns: string[] = ['n', 'paymentValue', 'date', 'expand'];
 
   constructor(
@@ -69,12 +87,19 @@ export class TableOexpensesComponent implements OnInit {
     private _service: PaymentsService,
     private dataInvoiseService: DataInvoiseService,
     public invioiseModal: MatDialog,
+    private formBuilder: FormBuilder,
+    private invoiceGopService: InvoiceGopService,
+    public dataSector: DataSectorsService,
   ) {
     this.editPaymentValue = new FormGroup({
       'paymentValue': new FormControl('', Validators.required),
     });
     this.newPaymentValue = new FormGroup({
       'paymentValue': new FormControl('', Validators.required),
+    });
+    this.newPaymenChargesCustomerValue = this.formBuilder.group({
+      collectionValue: ['', Validators.required],
+      dateControl: ['', Validators.required],
     });
   }
 
@@ -104,47 +129,81 @@ export class TableOexpensesComponent implements OnInit {
     this.stateEdit.tr = !this.stateEdit.tr;
   }
 
-  handleSave(id: number){
+  handleSave(id: number) {
     const dto = {
       ...this.editPaymentValue.value,
       "idWorker": this.idWorker,
-      "idOperationalExpenses": this.idOperationalExpenses
+      "idOperationalExpenses": this.idOperationalExpenses,
     };
     this._service.update(id.toString(), dto).subscribe(res => {
-      this.readOE.emit();
+      this.ELEMENT_DATA = [];
+      this.dataSource = [];
+      this.stateEdit.tr = !this.stateEdit.tr;
+      this.ngOnInit();
     });
   }
 
-  handleDelete(idPago: number, idGop: number){
+  handleDelete(idPago: number, idGop: number) {
     this._serviceOpw.delete(idGop.toString()).subscribe(res => {
-      this._service.delete(idPago.toString()).subscribe(res => console.log(res));
+      this._service.delete(idPago.toString()).subscribe(res => {
+        this.ELEMENT_DATA = [];
+        this.dataSource = [];
+        this.ngOnInit();
+      });
     });
-    this.readOE.emit();
   }
 
-  handleNewPayment(){
+  handleNewPayment() {
     this.stateButton = (this.stateButton === 'normal') ? 'rotado' : 'normal';
     this.stateButtonColor = (this.stateButtonColor === 'accent') ? 'warn' : 'accent';
     this.isExpanded = !this.isExpanded;
   }
 
-  handleSavePayment(){
+  handleSavePayment() {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const dto = {
-      ...this.newPaymentValue.value,
+      paymentValue: this.newPaymenChargesCustomerValue.value.collectionValue,
+      PaymentDate: this.newPaymenChargesCustomerValue.value.dateControl.toLocaleDateString('es-ES', options).toString(),
       "idWorker": this.idWorker,
       "idOperationalExpenses": this.idOperationalExpenses,
     };
-    this._service.create(dto).subscribe(res =>{
+    this._service.create(dto).subscribe(res => {
       this._serviceOpw.create({
         "idOE": this.idOperationalExpenses,
         "idPayment": res.ID_PAGOS,
         "idWorker": this.idWorker,
-      }).subscribe()
-      this.readOE.emit();
-    })
+      }).subscribe(res => {
+        this.ELEMENT_DATA = [];
+        this.dataSource = [];
+        this.isExpanded = !this.isExpanded;
+        this.stateButton = (this.stateButton === 'normal') ? 'rotado' : 'normal';
+        this.stateButtonColor = (this.stateButtonColor === 'accent') ? 'warn' : 'accent';
+        this.newPaymenChargesCustomerValue.reset();
+        this.ngOnInit()
+        this.createInvoce()
+      });
+    });
   }
 
-  modalInvoise(element: PeriodicElement){
+  createInvoce() {
+    const id = Number(this.idOperationalExpenses);
+    this._serviceOpw.getOneOe(id).subscribe((res: getPaymentsAndWorkerAndOe[]) => {
+      const idOE = res[0].ID_GOP;
+      console.log('idOE', idOE, 'this.idOperationalExpenses', this.idOperationalExpenses)
+      const idSector = parseInt(this.dataSector.id);
+      console.log('OperationalExpensesTotal', this.OperationalExpensesTotal)
+      this.invoiceGopService.create({
+        sectorId: idSector,
+        workerId: this.idWorker,
+        concept: this.OperationalExpensesTotal.TIPO_GASTO,
+        idGop: idOE,
+      }).subscribe(create => {
+        console.log('create', create)
+      });
+    });
+  }
+
+  modalInvoise(element: PeriodicElement) {
     this.dataInvoiseService.periodicElementGop = element;
     this.dataInvoiseService.fullOrPartialInvoice = false;
     this.invioiseModal.open(InvoiseGoComponent, {
