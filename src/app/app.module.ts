@@ -26,6 +26,8 @@ import { ScrollPositionDirective } from './directives/scroll-position.directive'
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MessageDialogComponent } from './components/mensaje/message-dialog/message-dialog.component';
+import { ConfirmationDialogComponent } from './components/mensaje/confirmation-dialog/confirmation-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,7 @@ import { MessageDialogComponent } from './components/mensaje/message-dialog/mess
     CanvasGrafigLineComponent,
     ScrollPositionDirective,
     MessageDialogComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     ReactiveFormsModule,
@@ -53,11 +56,10 @@ import { MessageDialogComponent } from './components/mensaje/message-dialog/mess
     NgChartsModule,
     MatCardModule,
     MatDialogModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule,
   ],
-  providers: [
-    CookieService
-  ],
-  bootstrap: [AppComponent]
+  providers: [CookieService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

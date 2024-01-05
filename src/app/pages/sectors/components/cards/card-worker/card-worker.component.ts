@@ -1,10 +1,28 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { catchError, of } from 'rxjs';
-import { WorkersService, getWorkers } from 'src/app/services/Http/workers.service';
+import { ConfirmationDialogComponent } from 'src/app/components/mensaje/confirmation-dialog/confirmation-dialog.component';
+import {
+  WorkersService,
+  getWorkers,
+} from 'src/app/services/Http/workers.service';
 import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
+import { ModalService } from 'src/app/services/modal/modal.service';
 
 @Component({
   selector: 'app-card-worker',
@@ -14,22 +32,22 @@ import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
     ]),
     trigger('fade', [
       transition('void => *', [
         style({ opacity: 0 }),
-        animate(500, style({ opacity: 1 }))
+        animate(500, style({ opacity: 1 })),
       ]),
-      transition('* => void', [
-        animate(500, style({ opacity: 0 }))
-      ])
+      transition('* => void', [animate(500, style({ opacity: 0 }))]),
     ]),
-  ]
+  ],
 })
 export class CardWorkerComponent implements OnInit {
-
-  @Output() readOECard = new EventEmitter()
+  @Output() readOECard = new EventEmitter();
 
   formEditWorker!: FormGroup;
 
@@ -48,7 +66,9 @@ export class CardWorkerComponent implements OnInit {
     private _serviceWorker: WorkersService,
     private dataService: DataSectorsService,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private messageService: ModalService,
+    private dialog: MatDialog
   ) {
     this.formEditWorker = this.fb.group({
       identification: ['', Validators.required],
@@ -60,10 +80,10 @@ export class CardWorkerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = Number(this.dataService.id)
-    this._serviceWorker.getOneSector(id).subscribe(res => {
+    const id = Number(this.dataService.id);
+    this._serviceWorker.getOneSector(id).subscribe((res) => {
       this.workers = res;
-    })
+    });
     this.isExpanded = false;
     this.activateIdEdit = undefined;
     this.cdr.detectChanges();
@@ -76,7 +96,9 @@ export class CardWorkerComponent implements OnInit {
 
   handleEdit(worker: getWorkers) {
     this.activateIdEdit = worker.ID_TRABAJADORES;
-    this.formEditWorker.controls['identification'].setValue(worker.IDENTIFICACION);
+    this.formEditWorker.controls['identification'].setValue(
+      worker.IDENTIFICACION
+    );
     this.formEditWorker.controls['name'].setValue(worker.NOMBRE);
     this.formEditWorker.controls['lastName'].setValue(worker.APELLIDO);
     this.formEditWorker.controls['email'].setValue(worker.CORREO);
@@ -93,32 +115,59 @@ export class CardWorkerComponent implements OnInit {
 
   handleSaveNew() {
     let data = this.formEditWorker.value;
-    const id_sectors = Number(this.dataService.id)
+    const id_sectors = Number(this.dataService.id);
     data = {
       ...data,
       id_sectors,
-    }
+    };
     data = this.convertToUppercase(data);
-    this._serviceWorker.create(data)
-      .subscribe(res => {
+    this._serviceWorker
+      .create(data)
+      .pipe(
+        catchError((error) => {
+          this.messageService.showMessage(
+            `Error en la operación al crear el trabajador ${error.error.message}`,
+            'error'
+          );
+          return [];
+        })
+      )
+      .subscribe((res) => {
         this.handleSet();
+        this.messageService.showMessage(
+          'Operación exitosa el trabajador se ha creado',
+          'success'
+        );
         this.ngOnInit();
         this.cdr.detectChanges();
-      }
-      );
+      });
   }
 
   handleEditSutmit(idWorker: number) {
     let data = this.formEditWorker.value;
-    const id_sectors = Number(this.dataService.id)
+    const id_sectors = Number(this.dataService.id);
     data = {
       ...data,
       id_sectors,
-    }
+    };
     data = this.convertToUppercase(data);
-    this._serviceWorker.update(idWorker.toString(), data)
-      .subscribe(res => {
+    this._serviceWorker
+      .update(idWorker.toString(), data)
+      .pipe(
+        catchError((error) => {
+          this.messageService.showMessage(
+            `Error en la operación al editar el trabajador ${error.error.message}`,
+            'error'
+          );
+          return [];
+        })
+      )
+      .subscribe((res) => {
         this.handleSet();
+        this.messageService.showMessage(
+          'Operación exitosa el trabajador se ha editado',
+          'success'
+        );
         this.ngOnInit();
         this.cdr.detectChanges();
       });
@@ -129,27 +178,41 @@ export class CardWorkerComponent implements OnInit {
   }
 
   handleDelete(id: number) {
-    this._serviceWorker.delete(id.toString())
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          this.modalString = 'el trabajador tiene gastos operacionales, para eliminar borrar los pagos realizados';
-          this.seeModal = !this.seeModal;
-          return of(null);
-        })
-      )
-      .subscribe(res => {
-        this.handleSet();
-        this.ngOnInit();
-        this.cdr.detectChanges();
-        !this.seeModal ? this.ngOnInit() : console.log(res);
-      })
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this._serviceWorker
+          .delete(id.toString())
+          .pipe(
+            catchError((error) => {
+              this.messageService.showMessage(
+                `Error en la operación al eliminar el trabajador ${error.error.message}`,
+                'error'
+              );
+              return [];
+            })
+          )
+          .subscribe((res) => {
+            this.handleSet();
+            this.messageService.showMessage(
+              'Operación exitosa el trabajador se ha eliminado',
+              'success'
+            );
+            this.ngOnInit();
+            this.cdr.detectChanges();
+            !this.seeModal ? this.ngOnInit() : console.log(res);
+          });
+      } else {
+      }
+    });
   }
 
   loanPage() {
     this.activateIdEdit = undefined;
   }
 
-  convertToUppercase(object: { [x: string]: string; }) {
+  convertToUppercase(object: { [x: string]: string }) {
     for (let propiedad in object) {
       if (typeof object[propiedad] === 'string') {
         object[propiedad] = object[propiedad].replace(/\s+/g, '_');
@@ -172,5 +235,4 @@ export class CardWorkerComponent implements OnInit {
   closeMode() {
     this.seeModal = !this.seeModal;
   }
-
 }

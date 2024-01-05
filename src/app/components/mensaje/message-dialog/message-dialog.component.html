@@ -1,1 +1,9 @@
-<p>message-dialog works!</p>
+<mat-card>
+  <mat-card-header class="header">
+    <mat-icon [style.color]="getColor()">{{ getIcon() }}</mat-icon>
+    <mat-card-title>{{ getTitle() }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>{{ data.message }}</p>
+  </mat-card-content>
+</mat-card>

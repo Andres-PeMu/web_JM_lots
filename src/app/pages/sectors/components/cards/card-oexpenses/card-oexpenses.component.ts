@@ -1,16 +1,29 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { Observable, map, startWith } from 'rxjs';
-import { OpeExpensesService, getOe } from 'src/app/services/Http/ope-expenses.service';
-import { WorkersService, getWorkers } from 'src/app/services/Http/workers.service';
+import { Observable, catchError, map, startWith } from 'rxjs';
+import {
+  OpeExpensesService,
+  getOe,
+} from 'src/app/services/Http/ope-expenses.service';
+import {
+  WorkersService,
+  getWorkers,
+} from 'src/app/services/Http/workers.service';
 import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
 import { ShellOverviewOEComponent } from '../../shell-overview/shell-overview-oe/shell-overview-oe.component';
 import { DataOEService } from 'src/app/services/date/data-oe.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InvoiseGoComponent } from '../../invoises/invoise-go/invoise-go.component';
 import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
+import { ModalService } from 'src/app/services/modal/modal.service';
 
 @Component({
   selector: 'app-card-oexpenses',
@@ -20,22 +33,22 @@ import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
     ]),
     trigger('fade', [
       transition('void => *', [
         style({ opacity: 0 }),
-        animate(500, style({ opacity: 1 }))
+        animate(500, style({ opacity: 1 })),
       ]),
-      transition('* => void', [
-        animate(500, style({ opacity: 0 }))
-      ])
+      transition('* => void', [animate(500, style({ opacity: 0 }))]),
     ]),
-  ]
+  ],
 })
 export class CardOexpensesComponent {
-
-  @Output() readOECard = new EventEmitter()
+  @Output() readOECard = new EventEmitter();
 
   formEditOe!: FormGroup;
 
@@ -46,10 +59,10 @@ export class CardOexpensesComponent {
   isExpanded = false;
 
   getWorkers: getWorkers[] = [];
-  results: getWorkers[] | undefined = []
+  results: getWorkers[] | undefined = [];
   filteredOptions: Observable<getWorkers[]> | undefined;
 
-  @Input() OperationalExpenses: getOe[] = []
+  @Input() OperationalExpenses: getOe[] = [];
 
   constructor(
     private _dataSectors: DataSectorsService,
@@ -60,7 +73,9 @@ export class CardOexpensesComponent {
     private _service: OpeExpensesService,
     private dataInvoiseService: DataInvoiseService,
     public invioiseModal: MatDialog,
-  ) { }
+    private messageService: ModalService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.formEditOe = this.fb.group({
@@ -69,13 +84,15 @@ export class CardOexpensesComponent {
       hourValueWorked: ['', Validators.required],
       idWorker: ['', Validators.required],
     });
-    this._serviceWorkers.getOneSector(Number(this._dataSectors.id)).subscribe(res => {
-      this.getWorkers = res;
-      this.results = res;
-    });
+    this._serviceWorkers
+      .getOneSector(Number(this._dataSectors.id))
+      .subscribe((res) => {
+        this.getWorkers = res;
+        this.results = res;
+      });
     this.filteredOptions = this.formEditOe.valueChanges.pipe(
       startWith(''),
-      map(value => this.handleChange(value)),
+      map((value) => this.handleChange(value))
     );
   }
 
@@ -91,23 +108,37 @@ export class CardOexpensesComponent {
       hourValueWorked: data.HORAS_TRABAJADAS,
       idWorker: data.ID_TRABAJADOR,
     });
-    this.formEditOe
+    this.formEditOe;
     this.activateIdEdit = data.ID_GASTOS;
   }
 
   handleSaveNew() {
     let data = this.formEditOe.value;
-    const idSector = Number(this._dataSectors.id)
+    const idSector = Number(this._dataSectors.id);
     const fullValue = data.hourValue * data.hourValueWorked;
     data = {
       ...data,
       idSector,
-      fullValue
-    }
-    this._service.create(data)
-      .subscribe(res => {
+      fullValue,
+    };
+    this._service
+      .create(data)
+      .pipe(
+        catchError((error) => {
+          this.messageService.showMessage(
+            `Error en la operación al crear ${error.error.message}`,
+            'error'
+          );
+          return [];
+        })
+      )
+      .subscribe((res) => {
         this.getWorkers = [];
         this.results = [];
+        this.messageService.showMessage(
+          'Operación exitosa se ha creado',
+          'success'
+        );
         this.readOECard.emit();
         this.ngOnInit();
         this.activateIdEdit = undefined;
@@ -116,18 +147,32 @@ export class CardOexpensesComponent {
 
   handleEditSutmit(id_oE: number) {
     let data = this.formEditOe.value;
-    const idSector = Number(this._dataSectors.id)
+    const idSector = Number(this._dataSectors.id);
     const fullValue = data.hourValue * data.hourValueWorked;
     data = {
       ...data,
       idSector,
-      fullValue
-    }
-    this._service.update(id_oE.toString(), data)
-      .subscribe(res => {
+      fullValue,
+    };
+    this._service
+      .update(id_oE.toString(), data)
+      .pipe(
+        catchError((error) => {
+          this.messageService.showMessage(
+            `Error en la operación al editar ${error.error.message}`,
+            'error'
+          );
+          return [];
+        })
+      )
+      .subscribe((res) => {
         this.getWorkers = [];
         this.results = [];
         this.readOECard.emit();
+        this.messageService.showMessage(
+          'Operación exitosa se ha editado',
+          'success'
+        );
         this.ngOnInit();
         this.activateIdEdit = undefined;
       });
@@ -147,7 +192,7 @@ export class CardOexpensesComponent {
     this.activateIdEdit = undefined;
   }
 
-  convertToUppercase(object: { [x: string]: string; }) {
+  convertToUppercase(object: { [x: string]: string }) {
     for (let propiedad in object) {
       if (typeof object[propiedad] === 'string') {
         object[propiedad] = object[propiedad].replace(/\s+/g, '_');
@@ -160,16 +205,22 @@ export class CardOexpensesComponent {
   handleChange(event: any) {
     const query = event.id_customer;
     if (this.results!.length !== 0) {
-      this.results = this.getWorkers.filter(d => d.NOMBRE.toLowerCase().indexOf(query) > -1);
+      this.results = this.getWorkers.filter(
+        (d) => d.NOMBRE.toLowerCase().indexOf(query) > -1
+      );
       if (this.results.length == 0) {
-        this.results = this.getWorkers.filter(d => d.APELLIDO.toLowerCase().indexOf(query) > -1);
+        this.results = this.getWorkers.filter(
+          (d) => d.APELLIDO.toLowerCase().indexOf(query) > -1
+        );
         if (this.results.length == 0) {
-          this.results = this.getWorkers.filter(d => d.IDENTIFICACION.toString().indexOf(query) > -1);
+          this.results = this.getWorkers.filter(
+            (d) => d.IDENTIFICACION.toString().indexOf(query) > -1
+          );
         }
       }
       return this.results;
     }
-    return this.results = this.getWorkers;
+    return (this.results = this.getWorkers);
   }
 
   handleRead() {
@@ -189,5 +240,4 @@ export class CardOexpensesComponent {
       exitAnimationDuration: '1000ms',
     });
   }
-
 }

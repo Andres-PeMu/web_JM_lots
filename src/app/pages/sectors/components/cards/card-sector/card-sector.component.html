@@ -36,7 +36,7 @@
         Ver
       </button>
       <button class="card_actions_button" color="primary" mat-raised-button mat-button
-        (click)="handleEdit(sector.ID_SECTOR)" *ngIf="activateIdEdit == undefined">Editar</button>
+        (click)="handleEdit(sector)" *ngIf="activateIdEdit == undefined">Editar</button>
       <button class="card_actions_button" color="accent" mat-raised-button mat-button
         (click)="handleSutmit(sector.ID_SECTOR)" *ngIf="activateIdEdit == sector.ID_SECTOR"
         [disabled]="formEditSector.invalid">Enviar</button>

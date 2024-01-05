@@ -1,9 +1,25 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { catchError, of } from 'rxjs';
-import { CustomersService, getCustomers } from 'src/app/services/Http/customers.service';
+import { MatDialog } from '@angular/material/dialog';
+import { catchError } from 'rxjs';
+import { ConfirmationDialogComponent } from 'src/app/components/mensaje/confirmation-dialog/confirmation-dialog.component';
+import {
+  CustomersService,
+  getCustomers,
+} from 'src/app/services/Http/customers.service';
+import { ModalService } from 'src/app/services/modal/modal.service';
 
 @Component({
   selector: 'app-card-customer',
@@ -13,21 +29,22 @@ import { CustomersService, getCustomers } from 'src/app/services/Http/customers.
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
     ]),
     trigger('fade', [
       transition('void => *', [
         style({ opacity: 0 }),
-        animate(500, style({ opacity: 1 }))
+        animate(500, style({ opacity: 1 })),
       ]),
-      transition('* => void', [
-        animate(500, style({ opacity: 0 }))
-      ])
+      transition('* => void', [animate(500, style({ opacity: 0 }))]),
     ]),
-  ]
+  ],
 })
 export class CardCustomerComponent {
-  @Output() readOECard = new EventEmitter()
+  @Output() readOECard = new EventEmitter();
 
   formEditCustomer!: FormGroup;
 
@@ -45,7 +62,9 @@ export class CardCustomerComponent {
   constructor(
     private _serviceCustomer: CustomersService,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private messageService: ModalService,
+    private dialog: MatDialog
   ) {
     this.formEditCustomer = this.fb.group({
       identification: ['', Validators.required],
@@ -57,9 +76,11 @@ export class CardCustomerComponent {
   }
 
   ngOnInit(): void {
-    this._serviceCustomer.getAll().subscribe((dataCustomers: getCustomers[]) => {
-      this.customers = dataCustomers;
-    })
+    this._serviceCustomer
+      .getAll()
+      .subscribe((dataCustomers: getCustomers[]) => {
+        this.customers = dataCustomers;
+      });
     this.isExpanded = false;
     this.activateIdEdit = undefined;
     this.cdr.detectChanges();
@@ -72,7 +93,9 @@ export class CardCustomerComponent {
 
   handleEdit(customers: getCustomers) {
     this.activateIdEdit = customers.ID_CLIENTES;
-    this.formEditCustomer.controls['identification'].setValue(customers.IDENTIFICACION);
+    this.formEditCustomer.controls['identification'].setValue(
+      customers.IDENTIFICACION
+    );
     this.formEditCustomer.controls['name'].setValue(customers.NOMBRE);
     this.formEditCustomer.controls['lastName'].setValue(customers.APELLIDO);
     this.formEditCustomer.controls['email'].setValue(customers.CORREO);
@@ -90,21 +113,48 @@ export class CardCustomerComponent {
   handleSaveNew() {
     let data = this.formEditCustomer.value;
     data = this.convertToUppercase(data);
-    this._serviceCustomer.create(data)
-      .subscribe(res => {
+    this._serviceCustomer
+      .create(data)
+      .pipe(
+        catchError((error) => {
+          this.messageService.showMessage(
+            `Error en la operación al crear el cliente ${error.error.message}`,
+            'error'
+          );
+          return [];
+        })
+      )
+      .subscribe((res) => {
         this.handleSet();
+        this.messageService.showMessage(
+          'Operación exitosa el cliente se ha creado',
+          'success'
+        );
         this.ngOnInit();
         this.cdr.detectChanges();
-      }
-      );
+      });
   }
 
   handleEditSutmit(idCustomer: number) {
     let data = this.formEditCustomer.value;
     data = this.convertToUppercase(data);
-    this._serviceCustomer.update(idCustomer.toString(), data)
-      .subscribe(res => {
+    this._serviceCustomer
+      .update(idCustomer.toString(), data)
+      .pipe(
+        catchError((error) => {
+          this.messageService.showMessage(
+            `Error en la operación al editar el cliente ${error.error.message}`,
+            'error'
+          );
+          return [];
+        })
+      )
+      .subscribe((res) => {
         this.handleSet();
+        this.messageService.showMessage(
+          'Operación exitosa el cliente se ha editado',
+          'success'
+        );
         this.ngOnInit();
         this.cdr.detectChanges();
       });
@@ -115,27 +165,41 @@ export class CardCustomerComponent {
   }
 
   handleDelete(id: number) {
-    this._serviceCustomer.delete(id.toString())
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          this.modalString = 'el trabajador tiene uno o mas lotes, para eliminar borrar los lotes';
-          this.seeModal = !this.seeModal;
-          return of(null);
-        })
-      )
-      .subscribe(res => {
-        this.handleSet();
-        this.ngOnInit();
-        this.cdr.detectChanges();
-        !this.seeModal ? this.ngOnInit() : console.log(res);
-      })
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this._serviceCustomer
+          .delete(id.toString())
+          .pipe(
+            catchError((error) => {
+              this.messageService.showMessage(
+                `Error en la operación al eliminar el cliente ${error.error.message}`,
+                'error'
+              );
+              return [];
+            })
+          )
+          .subscribe((res) => {
+            this.handleSet();
+            this.messageService.showMessage(
+              'Operación exitosa el cliente se ha eliminado',
+              'success'
+            );
+            this.ngOnInit();
+            this.cdr.detectChanges();
+            !this.seeModal ? this.ngOnInit() : console.log(res);
+          });
+      } else {
+      }
+    });
   }
 
   loanPage() {
     this.activateIdEdit = undefined;
   }
 
-  convertToUppercase(object: { [x: string]: string; }) {
+  convertToUppercase(object: { [x: string]: string }) {
     for (let propiedad in object) {
       if (typeof object[propiedad] === 'string') {
         object[propiedad] = object[propiedad].replace(/\s+/g, '_');
@@ -159,5 +223,4 @@ export class CardCustomerComponent {
     this.seeModal = !this.seeModal;
     this.cdr.detectChanges();
   }
-
 }

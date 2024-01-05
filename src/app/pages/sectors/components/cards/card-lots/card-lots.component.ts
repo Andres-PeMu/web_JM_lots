@@ -1,9 +1,19 @@
-import { Component, EventEmitter, Input, Output, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
-import { Observable, map, startWith } from 'rxjs';
-import { CustomersService, getCustomers } from 'src/app/services/Http/customers.service';
+import { Observable, catchError, map, startWith } from 'rxjs';
+import {
+  CustomersService,
+  getCustomers,
+} from 'src/app/services/Http/customers.service';
 import { LotsService, getLots } from 'src/app/services/Http/lots.service';
 import { SalesService } from 'src/app/services/Http/sales.service';
 import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
@@ -13,19 +23,20 @@ import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InvoiceComponent } from '../../invoises/invoise-lot/invoice.component';
 import { ScrollService } from 'src/app/services/directive/scroll.service';
+import { ModalService } from 'src/app/services/modal/modal.service';
 
 export interface formEditSector {
-  "lotValue": string,
-  "id_customer": string,
+  lotValue: string;
+  id_customer: string;
 }
 
 @Component({
   selector: 'app-card-lots',
   templateUrl: './card-lots.component.html',
-  styleUrls: ['./card-lots.component.scss']
+  styleUrls: ['./card-lots.component.scss'],
 })
 export class CardLotsComponent implements OnInit {
-  @Output() readLot = new EventEmitter()
+  @Output() readLot = new EventEmitter();
 
   formEditSector!: FormGroup;
 
@@ -52,21 +63,22 @@ export class CardLotsComponent implements OnInit {
     private _dataLots: DataLotsService,
     private _dataInvoise: DataInvoiseService,
     public invioiseModal: MatDialog,
-  ) { }
+    private messageService: ModalService
+  ) {}
 
   ngOnInit(): void {
     this.lotsChange = this.lots;
     this.formEditSector = this.fb.group({
       lotValue: ['', Validators.required],
-      id_customer: ['', Validators.required]
+      id_customer: ['', Validators.required],
     });
-    this._serviceCustomer.getAll().subscribe(res => {
+    this._serviceCustomer.getAll().subscribe((res) => {
       this.getCustomers = res;
       this.results = res;
     });
     this.filteredOptions = this.formEditSector.valueChanges.pipe(
       startWith(''),
-      map(value => this.handleChange(value)),
+      map((value) => this.handleChange(value))
     );
   }
 
@@ -95,42 +107,72 @@ export class CardLotsComponent implements OnInit {
 
   handleSutmit(lotNumber: number) {
     let data = this.formEditSector.value;
-    const id_sector = Number(this._dataSectors.id)
+    const id_sector = Number(this._dataSectors.id);
     data = {
       ...data,
       id_sector,
       lotNumber,
-    }
-    this._serviceLots.create(data).subscribe(res => {
-      this._serviceSales.create({
-        salesValue: data.lotValue,
-        id_lots: res.ID_LOTES,
-        id_customer: data.id_customer,
-      }).subscribe(res => {
-        this.handleCancel();
-        this.readLot.emit();
-      });
+    };
+    this._serviceLots.create(data).subscribe((res) => {
+      this._serviceSales
+        .create({
+          salesValue: data.lotValue,
+          id_lots: res.ID_LOTES,
+          id_customer: data.id_customer,
+        })
+        .pipe(
+          catchError((error) => {
+            this.messageService.showMessage(
+              `Error en la operación al crear el lote ${error.error.message}`,
+              'error'
+            );
+            return [];
+          })
+        )
+        .subscribe((res) => {
+          this.messageService.showMessage(
+            'Operación exitosa el lote se ha creado',
+            'success'
+          );
+          this.handleCancel();
+          this.readLot.emit();
+        });
     });
   }
 
   handleEditSutmit(lotNumber: number, idLot: number) {
     let data = this.formEditSector.value;
-    const id_sector = Number(this._dataSectors.id)
+    const id_sector = Number(this._dataSectors.id);
     data = {
       ...data,
       id_sector,
       lotNumber,
-    }
-    this._serviceLots.update(idLot.toString(), data).subscribe(res => {
+    };
+    this._serviceLots.update(idLot.toString(), data).subscribe((res) => {
       this.dataSales = res;
-      this._serviceSales.update(this.dataSales.ID_LOTES.toString(), {
-        salesValue: this.dataSales.VALOR_LOTE!,
-        id_lots: this.dataSales.ID_LOTES!,
-        id_customer: data.id_customer,
-      }).subscribe(res => {
-        this.handleCancel();
-        this.readLot.emit();
-      })
+      this._serviceSales
+        .update(this.dataSales.ID_LOTES.toString(), {
+          salesValue: this.dataSales.VALOR_LOTE!,
+          id_lots: this.dataSales.ID_LOTES!,
+          id_customer: data.id_customer,
+        })
+        .pipe(
+          catchError((error) => {
+            this.messageService.showMessage(
+              `Error en la operación al editar el lote ${error.error.message}`,
+              'error'
+            );
+            return [];
+          })
+        )
+        .subscribe((res) => {
+          this.messageService.showMessage(
+            'Operación exitosa el lote se ha editado',
+            'success'
+          );
+          this.handleCancel();
+          this.readLot.emit();
+        });
     });
   }
 
@@ -147,7 +189,7 @@ export class CardLotsComponent implements OnInit {
     this.activateIdEdit = undefined;
   }
 
-  convertToUppercase(object: { [x: string]: string; }) {
+  convertToUppercase(object: { [x: string]: string }) {
     for (let propiedad in object) {
       if (typeof object[propiedad] === 'string') {
         object[propiedad] = object[propiedad].replace(/\s+/g, '_');
@@ -160,25 +202,33 @@ export class CardLotsComponent implements OnInit {
   handleChange(event: formEditSector) {
     const query = event.id_customer;
     if (this.results!.length !== 0) {
-      this.results = this.getCustomers.filter(d => d.NOMBRE.toLowerCase().indexOf(query) > -1);
+      this.results = this.getCustomers.filter(
+        (d) => d.NOMBRE.toLowerCase().indexOf(query) > -1
+      );
       if (this.results.length == 0) {
-        this.results = this.getCustomers.filter(d => d.APELLIDO.toLowerCase().indexOf(query) > -1);
+        this.results = this.getCustomers.filter(
+          (d) => d.APELLIDO.toLowerCase().indexOf(query) > -1
+        );
         if (this.results.length == 0) {
-          this.results = this.getCustomers.filter(d => d.IDENTIFICACION.toString().indexOf(query) > -1);
+          this.results = this.getCustomers.filter(
+            (d) => d.IDENTIFICACION.toString().indexOf(query) > -1
+          );
         }
       }
       return this.results;
     }
-    return this.results = this.getCustomers;
+    return (this.results = this.getCustomers);
   }
 
   handleChangelots(event: Event) {
     const query = (event.target as HTMLInputElement).value.toLowerCase();
     if (this.lots!.length !== 0) {
-      this.lots = this.lotsChange.filter(d => d.NUMERO_LOTE.toString().toLowerCase().indexOf(query) > -1);
+      this.lots = this.lotsChange.filter(
+        (d) => d.NUMERO_LOTE.toString().toLowerCase().indexOf(query) > -1
+      );
       return this.lots;
     }
-    return this.lots = this.lotsChange;
+    return (this.lots = this.lotsChange);
   }
 
   handleRead() {
@@ -195,5 +245,4 @@ export class CardLotsComponent implements OnInit {
       exitAnimationDuration: '1000ms',
     });
   }
-
 }
