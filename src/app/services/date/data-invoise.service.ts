@@ -28,21 +28,21 @@ export class DataInvoiseService {
   }
   periodicElementAll: PeriodicElementLots[] = []
 
-  concepto : string = '';
+  concepto: string = '';
 
   fullOrPartialInvoice: boolean = false;
 
   constructor() { }
 
-  sabeDate(data: PeriodicElementLots){
+  saveDate(data: PeriodicElementLots) {
     this.periodicElement = data;
   }
 
-  sabeDateAll(data: PeriodicElementLots[]){
+  saveDateAll(data: PeriodicElementLots[]) {
     this.periodicElementAll = data;
   }
 
-  sabeConcept(concept: string){
+  saveConcept(concept: string) {
     this.concepto = concept;
   }
 

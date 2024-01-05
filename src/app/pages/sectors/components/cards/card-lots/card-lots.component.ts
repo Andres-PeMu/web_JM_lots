@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
@@ -68,6 +68,12 @@ export class CardLotsComponent implements OnInit {
       startWith(''),
       map(value => this.handleChange(value)),
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['lots']) {
+      const newLots = changes['lots'].currentValue;
+    }
   }
 
   handleinputEdit(event: Event) {
@@ -177,7 +183,7 @@ export class CardLotsComponent implements OnInit {
 
   handleRead() {
     this.handleCancel();
-    this.readLot.emit();
+    // this.readLot.emit();
   }
 
   handleInvoise(idLot: number, lotValue: number) {

@@ -18,7 +18,7 @@ export class LotsComponent implements OnInit {
     private _service: LotsService,
     private _dataServise: DataSectorsService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.lots = []
@@ -29,21 +29,21 @@ export class LotsComponent implements OnInit {
     }
   }
 
-  generateLots(){
+  generateLots() {
     for (let lotsLup = 0; lotsLup < this._dataServise.numberLot; lotsLup++) {
       const data = {
         "lotNumber": lotsLup + 1,
         "id_sector": Number(this._dataServise.id),
       }
       this._service.getOnelotAndSector(data.lotNumber, data.id_sector!)
-      .subscribe(res => {
-        this.lots.push(res[0]);
-        this.lots.sort((a, b) => a.NUMERO_LOTE - b.NUMERO_LOTE);
-      });
+        .subscribe(res => {
+          this.lots.push(res[0]);
+          this.lots.sort((a, b) => a.NUMERO_LOTE - b.NUMERO_LOTE);
+        });
     }
   }
 
-  readLot(){
+  readLot() {
     this.ngOnInit();
   }
 

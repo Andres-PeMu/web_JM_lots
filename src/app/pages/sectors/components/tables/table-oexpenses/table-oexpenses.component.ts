@@ -130,6 +130,7 @@ export class TableOexpensesComponent implements OnInit {
   }
 
   handleSave(id: number) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const dto = {
       ...this.editPaymentValue.value,
       "idWorker": this.idWorker,
@@ -204,6 +205,7 @@ export class TableOexpensesComponent implements OnInit {
   }
 
   modalInvoise(element: PeriodicElement) {
+    console.log('modalInvoise', element)
     this.dataInvoiseService.periodicElementGop = element;
     this.dataInvoiseService.fullOrPartialInvoice = false;
     this.invioiseModal.open(InvoiseGoComponent, {

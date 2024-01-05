@@ -23,6 +23,9 @@ import { MatCardModule } from '@angular/material/card';
 import { CanvasGrafigDoughnutComponent } from './components/canvas-grafig-doughnut/canvas-grafig-doughnut.component';
 import { CanvasGrafigLineComponent } from './components/canvas-grafig-line/canvas-grafig-line.component';
 import { ScrollPositionDirective } from './directives/scroll-position.directive';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MessageDialogComponent } from './components/mensaje/message-dialog/message-dialog.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,7 @@ import { ScrollPositionDirective } from './directives/scroll-position.directive'
     CanvasGrafigDoughnutComponent,
     CanvasGrafigLineComponent,
     ScrollPositionDirective,
+    MessageDialogComponent,
   ],
   imports: [
     ReactiveFormsModule,
@@ -47,7 +51,9 @@ import { ScrollPositionDirective } from './directives/scroll-position.directive'
     HttpClientModule,
     LoginModule,
     NgChartsModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule,
+    MatIconModule
   ],
   providers: [
     CookieService

@@ -27,7 +27,7 @@ export class CardSectorComponent implements OnInit {
     private _dataSectors: DataSectorsService,
     private fb: FormBuilder,
     private _bottomSheet: MatBottomSheet,
-    private  router: Router,
+    private router: Router,
   ) {
     this._service.getAll().subscribe(res => this.Sectors = res)
   }
@@ -57,7 +57,7 @@ export class CardSectorComponent implements OnInit {
   handleSutmit(idSector: number) {
     let data = this.formEditSector.value;
     data = this.convertToUppercase(data);
-    this._service.update(idSector.toString(), data).subscribe(res => console.log(res));
+    this._service.update(idSector.toString(), data).subscribe(res => { });
     window.location.reload();
   }
 

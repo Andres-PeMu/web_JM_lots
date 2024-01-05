@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { catchError, of } from 'rxjs';
 import { WorkersService, getWorkers } from 'src/app/services/Http/workers.service';
@@ -12,8 +12,8 @@ import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
   styleUrls: ['./card-worker.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
     trigger('fade', [
@@ -48,7 +48,8 @@ export class CardWorkerComponent implements OnInit {
     private _serviceWorker: WorkersService,
     private dataService: DataSectorsService,
     private fb: FormBuilder,
-  ){
+    private cdr: ChangeDetectorRef
+  ) {
     this.formEditWorker = this.fb.group({
       identification: ['', Validators.required],
       name: ['', Validators.required],
@@ -60,10 +61,12 @@ export class CardWorkerComponent implements OnInit {
 
   ngOnInit(): void {
     const id = Number(this.dataService.id)
-    this._serviceWorker.getOneSector(id).subscribe(res =>{
-      console.log(res);
+    this._serviceWorker.getOneSector(id).subscribe(res => {
       this.workers = res;
     })
+    this.isExpanded = false;
+    this.activateIdEdit = undefined;
+    this.cdr.detectChanges();
   }
 
   handleinputEdit(event: Event) {
@@ -80,6 +83,14 @@ export class CardWorkerComponent implements OnInit {
     this.formEditWorker.controls['phone'].setValue(worker.TELEFONO);
   }
 
+  handleSet() {
+    this.formEditWorker.controls['identification'].setValue('');
+    this.formEditWorker.controls['name'].setValue('');
+    this.formEditWorker.controls['lastName'].setValue('');
+    this.formEditWorker.controls['email'].setValue('');
+    this.formEditWorker.controls['phone'].setValue('');
+  }
+
   handleSaveNew() {
     let data = this.formEditWorker.value;
     const id_sectors = Number(this.dataService.id)
@@ -87,17 +98,17 @@ export class CardWorkerComponent implements OnInit {
       ...data,
       id_sectors,
     }
-    console.log(data)
     data = this.convertToUppercase(data);
     this._serviceWorker.create(data)
-    .subscribe( res =>{
-      console.log(res);
-      this.readOECard.emit();
-    }
-    );
+      .subscribe(res => {
+        this.handleSet();
+        this.ngOnInit();
+        this.cdr.detectChanges();
+      }
+      );
   }
 
-  handleEditSutmit( idWorker: number ) {
+  handleEditSutmit(idWorker: number) {
     let data = this.formEditWorker.value;
     const id_sectors = Number(this.dataService.id)
     data = {
@@ -106,10 +117,11 @@ export class CardWorkerComponent implements OnInit {
     }
     data = this.convertToUppercase(data);
     this._serviceWorker.update(idWorker.toString(), data)
-    .subscribe(res =>{
-      console.log(res);
-      this.readOECard.emit();
-    });
+      .subscribe(res => {
+        this.handleSet();
+        this.ngOnInit();
+        this.cdr.detectChanges();
+      });
   }
 
   handleCancel() {
@@ -118,16 +130,19 @@ export class CardWorkerComponent implements OnInit {
 
   handleDelete(id: number) {
     this._serviceWorker.delete(id.toString())
-    .pipe(
-      catchError( (error: HttpErrorResponse) =>{
-        this.modalString = 'el trabajador tiene gastos operacionales, para eliminar borrar los pagos realizados';
-        this.seeModal = !this.seeModal;
-        return of(null);
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.modalString = 'el trabajador tiene gastos operacionales, para eliminar borrar los pagos realizados';
+          this.seeModal = !this.seeModal;
+          return of(null);
+        })
+      )
+      .subscribe(res => {
+        this.handleSet();
+        this.ngOnInit();
+        this.cdr.detectChanges();
+        !this.seeModal ? this.ngOnInit() : console.log(res);
       })
-    )
-    .subscribe(res =>{
-      !this.seeModal ? this.readOECard.emit() : console.log(res);
-    })
   }
 
   loanPage() {
@@ -144,17 +159,18 @@ export class CardWorkerComponent implements OnInit {
     return object;
   }
 
-  handleRead(){
-    this.readOECard.emit();
+  handleRead() {
+    this.ngOnInit();
+    this.cdr.detectChanges();
   }
 
-  handleNewPayment(){
+  handleNewPayment() {
+    this.handleSet();
     this.isExpanded = !this.isExpanded;
   }
 
-  closeMode(){
+  closeMode() {
     this.seeModal = !this.seeModal;
-    console.log(this.seeModal)
   }
 
 }

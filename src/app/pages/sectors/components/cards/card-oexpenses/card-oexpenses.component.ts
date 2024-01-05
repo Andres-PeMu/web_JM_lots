@@ -18,8 +18,8 @@ import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
   styleUrls: ['./card-oexpenses.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
     trigger('fade', [
@@ -60,7 +60,7 @@ export class CardOexpensesComponent {
     private _service: OpeExpensesService,
     private dataInvoiseService: DataInvoiseService,
     public invioiseModal: MatDialog,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.formEditOe = this.fb.group({
@@ -105,16 +105,16 @@ export class CardOexpensesComponent {
       fullValue
     }
     this._service.create(data)
-    .subscribe(res =>{
-      this.getWorkers = [];
-      this.results = [];
-      this.readOECard.emit();
-      this.ngOnInit();
-      this.activateIdEdit = undefined;
-    });
+      .subscribe(res => {
+        this.getWorkers = [];
+        this.results = [];
+        this.readOECard.emit();
+        this.ngOnInit();
+        this.activateIdEdit = undefined;
+      });
   }
 
-  handleEditSutmit( id_oE: number ) {
+  handleEditSutmit(id_oE: number) {
     let data = this.formEditOe.value;
     const idSector = Number(this._dataSectors.id)
     const fullValue = data.hourValue * data.hourValueWorked;
@@ -123,15 +123,14 @@ export class CardOexpensesComponent {
       idSector,
       fullValue
     }
-    console.log(data)
     this._service.update(id_oE.toString(), data)
-    .subscribe(res =>{
-      this.getWorkers = [];
-      this.results = [];
-      this.readOECard.emit();
-      this.ngOnInit();
-      this.activateIdEdit = undefined;
-    });
+      .subscribe(res => {
+        this.getWorkers = [];
+        this.results = [];
+        this.readOECard.emit();
+        this.ngOnInit();
+        this.activateIdEdit = undefined;
+      });
   }
 
   handleCancel() {
@@ -173,17 +172,17 @@ export class CardOexpensesComponent {
     return this.results = this.getWorkers;
   }
 
-  handleRead(){
+  handleRead() {
     this.getWorkers = [];
     this.results = [];
     this.ngOnInit();
   }
 
-  handleNewPayment(){
+  handleNewPayment() {
     this.isExpanded = !this.isExpanded;
   }
 
-  modalInvoise(){
+  modalInvoise() {
     this.dataInvoiseService.fullOrPartialInvoice = true;
     this.invioiseModal.open(InvoiseGoComponent, {
       enterAnimationDuration: '1000ms',

@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { catchError, of } from 'rxjs';
 import { CustomersService, getCustomers } from 'src/app/services/Http/customers.service';
@@ -11,8 +11,8 @@ import { CustomersService, getCustomers } from 'src/app/services/Http/customers.
   styleUrls: ['./card-customer.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
     trigger('fade', [
@@ -45,7 +45,8 @@ export class CardCustomerComponent {
   constructor(
     private _serviceCustomer: CustomersService,
     private fb: FormBuilder,
-  ){
+    private cdr: ChangeDetectorRef
+  ) {
     this.formEditCustomer = this.fb.group({
       identification: ['', Validators.required],
       name: ['', Validators.required],
@@ -56,9 +57,12 @@ export class CardCustomerComponent {
   }
 
   ngOnInit(): void {
-    this._serviceCustomer.getAll().subscribe( (dataCustomers: getCustomers[]) => {
+    this._serviceCustomer.getAll().subscribe((dataCustomers: getCustomers[]) => {
       this.customers = dataCustomers;
     })
+    this.isExpanded = false;
+    this.activateIdEdit = undefined;
+    this.cdr.detectChanges();
   }
 
   handleinputEdit(event: Event) {
@@ -75,23 +79,35 @@ export class CardCustomerComponent {
     this.formEditCustomer.controls['phone'].setValue(customers.TELEFONO);
   }
 
+  handleSet() {
+    this.formEditCustomer.controls['identification'].setValue('');
+    this.formEditCustomer.controls['name'].setValue('');
+    this.formEditCustomer.controls['lastName'].setValue('');
+    this.formEditCustomer.controls['email'].setValue('');
+    this.formEditCustomer.controls['phone'].setValue('');
+  }
+
   handleSaveNew() {
     let data = this.formEditCustomer.value;
     data = this.convertToUppercase(data);
     this._serviceCustomer.create(data)
-    .subscribe( res =>{
-      this.readOECard.emit();
-    }
-    );
+      .subscribe(res => {
+        this.handleSet();
+        this.ngOnInit();
+        this.cdr.detectChanges();
+      }
+      );
   }
 
-  handleEditSutmit( idCustomer: number ) {
+  handleEditSutmit(idCustomer: number) {
     let data = this.formEditCustomer.value;
     data = this.convertToUppercase(data);
     this._serviceCustomer.update(idCustomer.toString(), data)
-    .subscribe(res =>{
-      this.readOECard.emit();
-    });
+      .subscribe(res => {
+        this.handleSet();
+        this.ngOnInit();
+        this.cdr.detectChanges();
+      });
   }
 
   handleCancel() {
@@ -100,16 +116,19 @@ export class CardCustomerComponent {
 
   handleDelete(id: number) {
     this._serviceCustomer.delete(id.toString())
-    .pipe(
-      catchError( (error: HttpErrorResponse) =>{
-        this.modalString = 'el trabajador tiene uno o mas lotes, para eliminar borrar los lotes';
-        this.seeModal = !this.seeModal;
-        return of(null);
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.modalString = 'el trabajador tiene uno o mas lotes, para eliminar borrar los lotes';
+          this.seeModal = !this.seeModal;
+          return of(null);
+        })
+      )
+      .subscribe(res => {
+        this.handleSet();
+        this.ngOnInit();
+        this.cdr.detectChanges();
+        !this.seeModal ? this.ngOnInit() : console.log(res);
       })
-    )
-    .subscribe(res =>{
-      !this.seeModal ? this.readOECard.emit() : console.log(res);
-    })
   }
 
   loanPage() {
@@ -126,17 +145,19 @@ export class CardCustomerComponent {
     return object;
   }
 
-  handleRead(){
-    this.readOECard.emit();
+  handleRead() {
+    this.ngOnInit();
+    this.cdr.detectChanges();
   }
 
-  handleNewPayment(){
+  handleNewPayment() {
+    this.handleSet();
     this.isExpanded = !this.isExpanded;
   }
 
-  closeMode(){
+  closeMode() {
     this.seeModal = !this.seeModal;
-    console.log(this.seeModal)
+    this.cdr.detectChanges();
   }
 
 }

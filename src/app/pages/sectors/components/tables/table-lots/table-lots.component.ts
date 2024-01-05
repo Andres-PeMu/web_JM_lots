@@ -10,6 +10,7 @@ import { InvoiceComponent } from '../../invoises/invoise-lot/invoice.component';
 import { DataInvoiseService } from 'src/app/services/date/data-invoise.service';
 import { InvoiceService } from 'src/app/services/Http/invoice.service';
 import { DataSectorsService } from 'src/app/services/date/data-sectors.service';
+import { DataLotsService } from 'src/app/services/date/data-lots.service';
 
 export interface PeriodicElementLots {
   n: number;
@@ -85,7 +86,8 @@ export class TableLotsComponent {
     private dataInvoise: DataInvoiseService,
     private dataSector: DataSectorsService,
     public invioiseModal: MatDialog,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public datalot: DataLotsService,
   ) {
     this.editSalesChargesCustomerValue = new FormGroup({
       'collectionValue': new FormControl('', Validators.required),
@@ -128,7 +130,7 @@ export class TableLotsComponent {
             })
         });
         this.dataSource = this.ELEMENT_DATA;
-        this.dataInvoise.sabeDateAll(this.ELEMENT_DATA)
+        this.dataInvoise.saveDateAll(this.ELEMENT_DATA)
       });
     });
   }
@@ -186,15 +188,14 @@ export class TableLotsComponent {
           concept: 'VENTA DE LOTE',
           idVencocli: resultServiceSales.ID_VENCOCLI!,
         }).subscribe((res) => { });
-        console.log('siii', resultServiceSales)
-        console.log('no', this.dataInvoise.periodicElementAll)
       })
     });
   }
 
   openModal(data: PeriodicElementLots) {
-    this.dataInvoise.sabeDate(data);
-    this.dataInvoise.sabeConcept('POR PAGO LOTE')
+    this.datalot.id = data.idLot ? data.idLot.toString() : '';
+    this.dataInvoise.saveDate(data);
+    this.dataInvoise.saveConcept('POR PAGO LOTE')
     this.dataInvoise.fullOrPartialInvoice = true;
     this.invioiseModal.open(InvoiceComponent, {
       enterAnimationDuration: '1000ms',
