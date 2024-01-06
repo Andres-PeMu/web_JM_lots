@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 export interface createOe {
-	"expenseType": string,
-	"hourValue": number,
-	"hourValueWorked": number,
-	"idWorker": number,
-	"idSector": number,
-	"fullValue": number,
+  "expenseType": string,
+  "hourValue": number,
+  "hourValueWorked": number,
+  "idWorker": number,
+  "idSector": number,
+  "fullValue": number,
 }
 
 export interface getOe {
@@ -25,7 +25,7 @@ export interface getOe {
 })
 export class OpeExpensesService {
 
-  private apiUrl = `http://localhost:3001/api/v1`;
+  private apiUrl = `https://jm-api.onrender.com/api/v1`;
 
   constructor(
     private http: HttpClient

@@ -10,7 +10,7 @@ export interface createInvoice {
 
 export interface getInvoice {
   APELLIDO: string;
-  CONCEPTO:string;
+  CONCEPTO: string;
   CORREO: string;
   FECHA_GUARDADA: string;
   FECHA_PAGO: string;
@@ -34,7 +34,7 @@ export interface getInvoice {
 })
 export class InvoiceService {
 
-  private apiUrl = `http://localhost:3001/api/v1`;
+  private apiUrl = `https://jm-api.onrender.com/api/v1`;
 
   constructor(
     private http: HttpClient

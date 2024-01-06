@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 export interface createSale {
-	salesValue: number;
-	id_lots: number;
-	id_customer: number;
+  salesValue: number;
+  id_lots: number;
+  id_customer: number;
 }
 
 export interface getSales {
@@ -19,7 +19,7 @@ export interface getSales {
 })
 export class SalesService {
 
-  private apiUrl = `http://localhost:3001/api/v1`;
+  private apiUrl = `https://jm-api.onrender.com/api/v1`;
 
   constructor(
     private http: HttpClient

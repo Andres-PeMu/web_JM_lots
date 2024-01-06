@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 export interface createSectors {
-	"name": string,
-	"lotNumber": number,
+  "name": string,
+  "lotNumber": number,
 }
 
 export interface getSectors {
@@ -17,7 +17,7 @@ export interface getSectors {
 })
 export class SectorsService {
 
-  private apiUrl = `http://localhost:3001/api/v1`;
+  private apiUrl = `https://jm-api.onrender.com/api/v1`;
 
   constructor(
     private http: HttpClient

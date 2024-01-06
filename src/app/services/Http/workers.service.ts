@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 export interface createWorker {
-	"identification": number,
-	"name": string,
-	"lastName": string,
-	"email": string,
-	"id_sectors": number,
+  "identification": number,
+  "name": string,
+  "lastName": string,
+  "email": string,
+  "id_sectors": number,
   "phone": number,
 }
 
@@ -25,7 +25,7 @@ export interface getWorkers {
 })
 export class WorkersService {
 
-  private apiUrl = `http://localhost:3001/api/v1`;
+  private apiUrl = `https://jm-api.onrender.com/api/v1`;
 
   constructor(
     private http: HttpClient

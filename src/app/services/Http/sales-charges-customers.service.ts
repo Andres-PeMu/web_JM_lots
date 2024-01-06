@@ -37,7 +37,7 @@ export interface getSalesChargesCostomersSchema {
 })
 export class SalesChargesCustomersService {
 
-  private apiUrl = `http://localhost:3001/api/v1`;
+  private apiUrl = `https://jm-api.onrender.com/api/v1`;
 
   constructor(
     private http: HttpClient

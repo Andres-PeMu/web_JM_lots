@@ -8,9 +8,9 @@ export interface createChargues {
 }
 
 export interface resultnewChargues {
-	ID_COBROS: number,
-	VALOR_COBRO: number,
-	ID_CLIENTE: number,
+  ID_COBROS: number,
+  VALOR_COBRO: number,
+  ID_CLIENTE: number,
 }
 
 export interface getChargues {
@@ -30,7 +30,7 @@ export interface getChargues {
 })
 export class ChargesService {
 
-  private apiUrl = `http://localhost:3001/api/v1`;
+  private apiUrl = `https://jm-api.onrender.com/api/v1`;
 
   constructor(
     private http: HttpClient
@@ -43,20 +43,20 @@ export class ChargesService {
   //     params = params.set('offset', offset);
   //   }
   //   return this.http.get<Product[]>(`${this.apiUrl}/categories/${categoryId}/products`, { params })
-        // .pipe(
-      //   catchError((error: HttpErrorResponse) => {
-      //     if (error.status === HttpStatusCode.Conflict) {
-      //       return throwError('Algo esta fallando en el server');
-      //     }
-      //     if (error.status === HttpStatusCode.NotFound) {
-      //       return throwError('El producto no existe');
-      //     }
-      //     if (error.status === HttpStatusCode.Unauthorized) {
-      //       return throwError('No estas permitido');
-      //     }
-      //     return throwError('Ups algo salio mal');
-      //   })
-      // )
+  // .pipe(
+  //   catchError((error: HttpErrorResponse) => {
+  //     if (error.status === HttpStatusCode.Conflict) {
+  //       return throwError('Algo esta fallando en el server');
+  //     }
+  //     if (error.status === HttpStatusCode.NotFound) {
+  //       return throwError('El producto no existe');
+  //     }
+  //     if (error.status === HttpStatusCode.Unauthorized) {
+  //       return throwError('No estas permitido');
+  //     }
+  //     return throwError('Ups algo salio mal');
+  //   })
+  // )
   // }
 
   getAll() {
